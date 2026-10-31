@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ostapchenya A" >
+    <meta name="description" content="Registration page">
+    <meta name="keywords" content="UNIMusic, music, player, music player, audio, mp3, Registration">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
+    <link rel="stylesheet" href="../../CSS/main.css">
+    <title>Registration</title>
+</head>
+<body class="register_page">
+    <nav class="setting">
+        <img src="" alt="" class="icon__image">
+    </nav>
+  <section class="registration">
+    <div class="registration__content">
+        <div>
+            <h2 class="registration__title">Registration</h2>
+            <form action="" method="post" class="registration__form">
+                <div class="registration__group">
+                    <div class="registration__box">
+                        <i class="ri-mail-fill registration__icon"></i>
+                        <input type="email" name="email" autocomplete="email"
+                         required placeholder=" " class="registration__input" id="email">
+                        <label for="email" class="registration__label">Your email</label>
+                    </div>
+
+                    <div class="registration__box">
+                        <i class="ri-lock-2-fill registration__icon"></i>
+                        <input type="password" name="password" autocomplete="current-password"
+                         required placeholder=" " class="registration__input" id="password">
+                        <label for="password" class="registration__label">Password</label>
+                    </div>
+
+                    <div class="registration__box">
+                        <i class="ri-check-fill registration__icon"></i>
+                        <input type="password" name="confirm_password" autocomplete="current-password" 
+                         required placeholder=" " class="registration__input" id="confirm_password"><!--тут-->
+                        <label for="confirm_password" class="registration__label">Confirm your password</label>
+                    </div>
+                </div>
+                <a href="#" class="registration__ihaveaccount">I have account</a>
+                <button  type="submit" class="registration__button">Confirm<i class="ri-send-ins-fill"></i>
+                </button>
+                <p class="registration__sign">
+                    Want to leave? <a href="#">Back to home</a>
+                </p>
+            </form>
+        </div>
+        <div class="registration__image">
+            <img src="../../assets/images/unicornimagelogin.jpg" alt="" class="registration__img">
+        </div>
+    </div>
+  </section>
+    <script src="../js/storage.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/register.js"></script>
+</body>
+</html>

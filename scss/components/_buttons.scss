@@ -1,0 +1,49 @@
+@use '../base/variables' as *;
+@use '../components/mixins' as *;
+
+.botton__primary {
+    @include button($color-primary, $color-text-light, $r-full);
+    padding: 10px 24px;
+}
+
+.botton__secondary {
+    @include button($color-bg-alt, $color-text, $r-full);
+    padding: 10px 24px;
+}
+
+.botton__danger { @include button($color-danger, $color-text-light, $r-full); }
+
+.botton__play {
+    @include button($color-primary, $color-text-light, 50%);
+    width: 40px; height: 40px; padding: 0;
+    box-shadow: 0 4px 12px rgba($color-primary, .3);
+    opacity: 0;
+    transition: opacity .2s, transform .1s;
+    .track__row:hover &,
+    .track__card:hover &,
+    .album-card:hover & { opacity: 1; }
+}
+
+.botton__favorite,
+.botton__delete,
+.botton__publish {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    padding: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: $color-text-muted;
+    transition: color .2s, background .2s;
+
+    &:hover { background: $color-bg-hover; }
+}
+
+.botton__favorite {
+    &:hover, &--active { color: $color-accent; }
+}
+.botton__delete { &:hover { color: $color-danger; } }
+.botton__publish {
+    &:hover, &--active { color: $color-primary; }
+}

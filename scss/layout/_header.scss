@@ -1,0 +1,131 @@
+@use '../base/variables' as *;
+@use '../components/forms' as *;
+@use '../components/mixins' as *;
+@use 'sass:color';
+
+.site__header {
+    display: grid;
+    grid-template-columns: max-content 1fr max-content;
+    align-items: center;
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: $header-h;
+    background: rgba(13, 13, 13, 0.8);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom: 1px solid $color-border;
+    gap: 24px;
+    padding: 0 24px;
+    z-index: 100;
+
+    @include adaptive-ui(tablet) {
+        height: 56px;
+        padding: 0 12px;
+        gap: 12px;
+    }
+}
+
+.site__header-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: $color-text-light;
+    font-weight: 800;
+    font-size: $font-size-big;
+    justify-self: start;
+
+    img { width: 36px; height: 36px; }
+}
+
+.site__header-brand { color: $color-text-light; }
+
+.search__form {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    max-width: 480px;
+    height: 40px;
+    padding: 0 6px 0 16px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: $r-full;
+    justify-self: center;
+    transition: background .2s, box-shadow .2s;
+
+    &:focus-within {
+        background: rgba(255, 255, 255, 0.12);
+        box-shadow: 0 0 0 3px rgba($color-primary, .25);
+    }
+
+    @include adaptive-ui(desktop) { max-width: 320px; }
+    @include adaptive-ui(tablet)  { display: none; }
+}
+
+.search__form-input {
+    @include input-bare($color-text);
+    font-size: $font-size-small;
+    flex: 1;
+    padding: 0 8px;
+}
+
+.search__form-icon-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 32px;
+    height: 32px;
+    color: $color-text-muted;
+    border-radius: 50%;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+
+    &:hover { background: rgba(255,255,255,.1); color: $color-text; }
+}
+
+.header__auth-group {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 16px;
+}
+
+.button__login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: $color-primary;
+    color: $color-text-light;
+    font-weight: 600;
+    border: none;
+    transition: background .2s;
+
+    &:hover { background: $color-primary-hover; }
+
+    &--text {
+        height: 32px;
+        padding: 0 16px;
+        border-radius: $r-full;
+        font-size: $font-size-small;
+    }
+
+    &--icon {
+        width: 32px; height: 32px;
+        border-radius: 50%;
+        font-size: 18px;
+    }
+}
+
+.button__logout {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    color: $color-text-muted;
+    font-size: 18px;
+    cursor: pointer;
+    border: none;
+    transition: background .2s, color .2s;
+
+    &:hover { background: rgba($color-danger, .15); color: $color-danger; }
+}

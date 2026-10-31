@@ -1,0 +1,36 @@
+@use '../base/variables' as *;
+
+.sidebar {
+    padding: 32px 24px;
+    background: $color-bg-elevated;
+    border-left: 1px solid $color-border;
+
+    @media (max-width: $desktop) { display: none; }
+}
+
+.sidebar__title {
+    font-size: $font-size-xs;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: $color-text-muted;
+    margin-bottom: 16px;
+}
+
+.sidebar__list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 32px;
+
+    li { font-size: $font-size-small; color: $color-text; }
+}
+
+.sidebar__link {
+    display: block;
+    padding: 8px 12px;
+    border-radius: $r-md;
+    color: $color-text;
+    transition: background .2s, color .2s;
+
+    &:hover { background: $color-bg-hover; color: $color-primary; }
+}

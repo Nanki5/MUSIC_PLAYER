@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ostapchenya A">
+    <meta name="description" content="About page">
+    <meta name="keywords" content="UNIMusic, about, contacts">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
+    <link rel="stylesheet" href="../../CSS/main.css">
+    <title>UNIMusic - о сервисе</title>
+</head>
+<body class="about__page">
+    <header class="site__header">
+        <a href="home.html" class="site__header-logo">
+            <img src="../../assets/images/unicorn.svg" alt="Логотип">
+            <span class="site__header-brand">UNIMusic</span>
+        </a>
+        <form class="search__form" onsubmit="">
+            <input type="search" placeholder="Search..." class="search__form-input">
+            <button type="submit" class="ri-search-line search__form-icon-button"></button>
+        </form>
+       <div class="header__auth-group" id="authGroup">
+            <a href="login.html" class="button__login">Sign in</a>
+        </div>
+    </header>
+    <nav class="main__nav">
+    <ul class="main-nav__list">
+            <li><a href="home.html"    class="nav__link"><i class="ri-home-5-fill"></i></a></li>
+            <li><a href="profile.html" class="nav__link"><i class="ri-music-2-fill"></i></a></li>
+            <li><a href="add_track.html" class="nav__link"><i class="ri-add-circle-fill"></i></a></li>
+            <li><a href="about.html"   class="nav__link"><i class="ri-information-fill"></i></a></li>
+        </ul>
+</nav>
+    <div class="content">
+        <main class="page__main">
+            <section class="about__hero">
+                <h1 class="about__hero-title">О сервисе</h1>
+                <div class="about__text">
+                    <h2 class="about__hero-subtitle">Музыка объединяет всех, кроме соседей</h2>
+                    <p>Аудиосервис UNIMusic — музыка для всех кто слышит или хотябы кивает головой в такт.</p>
+                </div>
+                </section>
+            <section class="section">
+                <h2 class="section__title">Для чего мы?</h2>
+                <div class="about__info-grid">
+                    <article class="about__info-card">
+                        <i class="ri-music-2-fill about__info-icon"></i>
+                        <h3 class="about__info-title">Тут есть музыка</h3>
+                        <p class="about__info-text">Миллионы треков в свободном доступе.</p>
+                    </article>
+                    <article class="about__info-card">
+                        <i class="ri-music-2-fill about__info-icon"></i>
+                        <h3 class="about__info-title">Храни прямо здесь</h3>
+                        <p class="about__info-text">Храните свою музыку - перенесите музыку в UNIMusic из других сервисов.</p>
+                    </article>
+                    <article class="about__info-card">
+                        <i class="ri-global-line about__info-icon"></i>
+                        <h3 class="about__info-title">Ничего не скачивай</h3>
+                        <p class="about__info-text">Слушайте онлайн на любом устройстве.</p>
+                    </article>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section__title">Контакты</h2>
+                <div class="about__contacts-grid">
+                    <article class="about__contact-card">
+                        <h3>Адрес</h3>
+                        <p>г. Гродно, ул. Ожешко</p>
+                    </article>
+                    <article class="about__contact-card">
+                        <h3>Email</h3>
+                        <p>info@unimusic.by</p>
+                    </article>
+                </div>
+            </section>
+        </main>
+        <aside class="sidebar">
+            <h3 class="sidebar__title">Мы в цифрах</h3>
+            <ul class="sidebar__list">
+                <li>почти 10 млн треков</li>
+                <li>почти 2 млн пользователей</li>
+                <li>почти 5 минут на рынке</li>
+            </ul>
+        </aside>
+    </div>
+        <div class="player" id="player" hidden>
+        <img class="player__cover" src="" alt="">
+        <div class="player__info">
+            <p class="player__name">—</p>
+            <p class="player__artist">—</p>
+        </div>
+        <button class="player__button" id="player__prev"><i class="ri-skip-back-fill"></i></button>
+        <button class="player__button player__button--play" id="player__play"><i class="ri-play-fill"></i></button>
+        <button class="player__button" id="player__next"><i class="ri-skip-forward-fill"></i></button>
+        <div class="player__progress">
+            <span class="player__time-current">0:00</span>
+            <div class="player__progress-bar" id="player__progress"><div class="player__progress-fill"></div></div>
+            <span class="player__time-final">0:00</span>
+        </div>
+        <audio id="player__audio"></audio>
+    </div>
+    <footer class="site__footer">
+        <p class="site-footer__copy">© 2026 UNIMusic.</p>
+    </footer>
+    <script src="../js/storage.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/player.js"></script>
+    <script src="../js/nav.js"></script>
+</body>
+</html>

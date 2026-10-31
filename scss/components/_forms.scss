@@ -1,0 +1,68 @@
+@use '../base/variables' as *;
+@use '../components/mixins' as *;
+
+.track__form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 600px;
+    padding: 28px;
+    background: $color-container;
+    border-radius: $r-xl;
+    border: 1px solid $color-border;
+}
+
+.track__label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 600;
+    color: $color-text;
+    font-size: $font-size-small;
+}
+
+.track__input,
+.track__select,
+.track__file,
+.track__textarea { @include input-base; }
+
+.track__textarea { resize: vertical; min-height: 120px; }
+.track__file     { padding: 10px; cursor: pointer; }
+
+.track__form-actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+@mixin auth-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: $color-bg;
+    color: $color-text;
+    padding: 24px;
+}
+
+@mixin auth-box {
+    width: 100%;
+    max-width: 420px;
+    background: $color-container;
+    border: 1px solid $color-border;
+    padding: 48px 32px;
+    border-radius: $r-xl;
+    box-shadow: $shadow-xl;
+    margin: 0 auto;
+}
+
+@mixin auth-field {
+    position: relative;
+    height: 52px;
+    background: $color-bg-alt;
+    border: 1px solid $color-border;
+    border-radius: $r-full;
+    display: flex;
+    align-items: center;
+    transition: border-color .2s;
+
+    &:focus-within { border-color: $color-primary; }
+}

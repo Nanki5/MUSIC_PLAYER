@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ostapchenya A">
+    <meta name="description" content="Add track page">
+    <meta name="keywords" content="UNIMusic, add track, music">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
+    <link rel="stylesheet" href="../../CSS/main.css">
+    <title>UNIMusic - добавить трек</title>
+</head>
+<body class="add__page">
+    <header class="site__header">
+        <a href="home.html" class="site__header-logo">
+            <img src="../../assets/images/unicorn.svg" alt="Логотип">
+            <span class="site__header-brand">UNIMusic</span>
+        </a>
+        <form class="search__form" onsubmit="">
+            <input type="search" placeholder="Search..." class="search__form-input">
+            <button type="submit" class="ri-search-line search__form-icon-button"></button>
+        </form>
+        <div class="header__auth-group" id="authGroup">
+            <a href="login.html" class="button__login">Sign in</a>
+        </div>
+    </header>
+    <nav class="main__nav">
+        <ul class="main-nav__list">
+            <li><a href="home.html"    class="nav__link"><i class="ri-home-5-fill"></i></a></li>
+            <li><a href="profile.html" class="nav__link"><i class="ri-music-2-fill"></i></a></li>
+            <li><a href="add_track.html" class="nav__link"><i class="ri-add-circle-fill"></i></a></li>
+            <li><a href="about.html"   class="nav__link"><i class="ri-information-fill"></i></a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <main class="page__main">
+            <section class="add__hero">
+                <h1 class="add__hero-title">Добавить трек</h1>
+                <p class="add__hero-subtitle">Заполните форму — трек появится в вашей музыке.</p>
+            </section>
+            <section class="section">
+                <form class="track__form" id="addTrackForm">
+                    <label class="track__label">Название:
+                        <input type="text" name="title" class="track__input" required>
+                    </label>
+                    <label class="track__label">Исполнитель:
+                        <input type="text" name="artist" class="track__input" required>
+                    </label>
+                    <label class="track__label">Жанр:
+                        <select name="genre" class="track__select">
+                            <option>Поп</option>
+                            <option>Рэп</option>
+                            <option>Рок</option>
+                            <option>Классика</option>
+                        </select>
+                    </label>
+                    <label class="track__label">Аудио (путь к файлу):
+                        <select name="audio" class="track__select" id="audioSelect" required>
+                        </select>
+                    </label>
+                    <label class="track__label">Обложка:
+                        <select name="cover" class="track__select" id="coverSelect" required>
+                        </select>
+                    </label>
+                    <label class="track__label">
+                        <input type="checkbox" name="isPublic">
+                        Опубликовать сразу (виден в «Популярное»)
+                    </label>
+                    <div class="track__form-actions">
+                        <button type="submit" class="botton__primary">Сохранить</button>
+                        <button type="reset" class="botton__secondary">Очистить</button>
+                    </div>
+                </form>
+            </section>
+        </main>
+        <aside class="sidebar">
+            <h3 class="sidebar__title">Подсказки</h3>
+            <ul class="sidebar__list">
+                <li>Заполните все обязательные поля</li>
+                <li>Обложка: JPG или PNG, до 5 МБ</li>
+                <li>Год: от 1900</li>
+                <li>Описание — необязательно</li>
+            </ul>
+            <h3 class="sidebar__title">Навигация</h3>
+            <ul class="sidebar__list">
+                <li><a href="profile.html" class="sidebar__link">Моя музыка</a></li>
+                <li><a href="home.html" class="sidebar__link">На главную</a></li>
+            </ul>
+        </aside>
+    </div>
+    <footer class="site__footer">
+        <p class="site-footer__copy">© 2026 UNIMusic.</p>
+    </footer>
+    <script src="../js/add_track.js"></script>
+    <script src="../../core/main.js"></script>
+    <script src="../js/storage.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/player.js"></script>
+    <script src="../js/nav.js"></script>
+    <script src="../js/add_track.js"></script> 
+</body>
+</html>
