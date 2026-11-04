@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ostapchenya A">
+    <meta name="description" content="My music page">
+    <meta name="keywords" content="UNIMusic, music, my music, favorites">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
+    <link rel="stylesheet" href="../../CSS/main.css">
+    <title>UNIMusic - моя музыка</title>
+</head>
+<body class="profile__page">
+    <header class="site__header">
+        <a href="home.html" class="site__header-logo">
+            <img src="../../assets/images/unicorn.svg" alt="Логотип">
+            <span class="site__header-brand">UNIMusic</span>
+        </a>
+        <form class="search__form" onsubmit="">
+            <input type="search" placeholder="Search..." class="search__form-input">
+            <button type="submit" class="ri-search-line search__form-icon-button"></button>
+        </form>
+        <div class="header__auth-group" id="authGroup">
+            <a href="login.html" class="button__login">Sign in</a>
+        </div>
+    </header>
+    <nav class="main__nav">
+        <ul class="main-nav__list">
+            <li><a href="home.html" class="nav__link"><i class="ri-home-5-fill"></i></a></li>
+            <li><a href="profile.html" class="nav__link"><i class="ri-music-2-fill"></i></a></li>
+            <li><a href="add_track.html" class="nav__link"><i class="ri-add-circle-fill"></i></a></li>
+            <li><a href="about.html" class="nav__link"><i class="ri-information-fill"></i></a></li>
+        </ul>
+    </nav>
+    <div class="content">
+        <main class="page__main">
+            <section class="profile__hero">
+                <h1 class="profile__hero-title">Моя музыка</h1>
+                <p class="profile__hero-subtitle">Всё, что ты сохранил и добавил.</p>
+            </section>
+            <section class="section">
+                <form class="profile__filter">
+                    <label class="profile__filter-label">
+                        Жанр:
+                        <select class="profile__filter-select">
+                            <option value="">Все</option>
+                            <option value="pop">Поп</option>
+                            <option value="rock">Рок</option>
+                        </select>
+                    </label>
+                    <label class="profile__filter-label">
+                        Сортировка:
+                        <select class="profile__filter-select">
+                            <option value="new">Новинки</option>
+                            <option value="title">По названию</option>
+                        </select>
+                    </label>
+                    <button type="submit" class="botton__primary">Применить</button>
+                </form>
+            </section>
+
+            <section class="section">
+                <div class="track__list">
+                    <!-- сюда костян добавлем сохраненные-->
+                </div>
+            </section>
+        </main>
+        <aside class="sidebar">
+            <h3 class="sidebar__title">Статистика</h3>
+            <ul class="sidebar__list">
+                <li>Всего треков: <strong id="totalCount">3</strong></li>
+                <li>В избранном: <strong id="favoriteCount">2</strong></li>
+            </ul>
+
+            <h3 class="sidebar__title">Быстрые действия</h3>
+            <ul class="sidebar__list">
+                <li><a href="add_track.html" class="sidebar__link">+ Добавить трек</a></li>
+                <li><a href="home.html" class="sidebar__link">На главную</a></li>
+            </ul>
+        </aside>
+    </div>
+        <div class="player" id="player" hidden>
+        <img class="player__cover" src="" alt="">
+        <div class="player__info">
+            <p class="player__name">—</p>
+            <p class="player__artist">—</p>
+        </div>
+        <button class="player__btn" id="player__prev"><i class="ri-skip-back-fill"></i></button>
+        <button class="player__btn player__btn--play" id="player__play"><i class="ri-play-fill"></i></button>
+        <button class="player__btn" id="player__next"><i class="ri-skip-forward-fill"></i></button>
+        <div class="player__progress">
+            <span class="player__time-current">0:00</span>
+            <div class="player__progress-bar" id="player__progress"><div class="player__progress-fill"></div></div>
+            <span class="player__time-final">0:00</span>
+        </div>
+        <audio id="player__audio"></audio>
+    </div>
+    <footer class="site__footer">
+        <p class="site-footer__copy">© 2026 UNIMusic.</p>
+    </footer>
+    <script src="../js/storage.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/player.js"></script>
+    <script src="../js/nav.js"></script>
+    <script src="../js/profile.js"></script>     
+</body>
+</html>

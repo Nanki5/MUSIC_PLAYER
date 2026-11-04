@@ -1,0 +1,47 @@
+@use 'variables' as *;
+
+h1, h2, h3 { font-weight: 700; line-height: 1.2; }
+h1 { font-size: $font-size-large; margin-bottom: 8px; }
+h2 { font-size: $font-size-big;   margin-bottom: 4px; }
+
+p { margin-bottom: 8px; }
+
+.content {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin-top: $header-h;
+    margin-left: $nav-w;
+    padding-bottom: $player-h;
+    min-height: calc(100vh - #{$header-h});
+}
+
+.content--with-sidebar {
+    grid-template-columns: 1fr 280px;
+    @media (max-width: $desktop) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.page__main {
+    padding: 32px 40px;
+    min-width: 0;
+    @media (max-width: $tablet) {
+        padding: 24px 16px;
+    }
+}
+
+.section { margin-bottom: 48px; }
+
+.section__title {
+    font-size: $font-size-big;
+    font-weight: 700;
+    color: $color-text;
+    margin-bottom: 20px;
+}
+
+.section__text {
+    color: $color-text-muted;
+    max-width: 800px;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}

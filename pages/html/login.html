@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="author" content="Ostapchenya A" >
+    <meta name="description" content="login page">
+    <meta name="keywords" content="test, html">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/remixicon/4.6.0/remixicon.css">
+    <link rel="stylesheet" href="../../CSS/main.css">
+    <title>Login</title>
+</head>
+<body login__page>
+    <nav class="setting">
+        <img src="" alt="" class="icon__image">
+    </nav>
+  <section class="login">
+    <div class="login__content">
+        <div>
+            <h2 class="login__title">Welcome!</h2>
+            <form action="" method="post" class="login__form">
+                <div class="login__group">
+                    <div class="login__box">
+                        <i class="ri-mail-fill login__icon"></i>
+                        <input type="email" name="email" autocomplete="email"
+                         required placeholder=" " class="login__input" id="email">
+                        <label for="email" class="login__label">Email</label>
+                    </div>
+
+                    <div class="login__box">
+                        <i class="ri-lock-2-fill login__icon"></i>
+                        <input type="password" name="password" autocomplete="current-password"
+                         required placeholder=" " class="login__input" id="password">
+                        <label for="password" class="login__label">Password</label>
+                    </div>
+                </div>
+                <a href="#" class="login__forgot">Forgot Password</a>
+                <button  type="submit" class="login__button">
+                    Log In <i class="ri-send-ins-fill"></i>
+                </button>
+                <p class="login_sign">
+                    Don't have an account? <a href="register.html"> Sign Up</a>
+                </p>
+            </form>
+        </div>
+        <div class="login__image">
+            <img src="../../assets/images/unicornimagelogin.jpg" alt="" class="login__img">
+        </div>
+    </div>
+  </section>
+    <script src="../js/storage.js"></script>
+    <script src="../js/auth.js"></script>
+    <script src="../js/login.js"></script>
+</body>
+</html>

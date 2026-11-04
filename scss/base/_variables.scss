@@ -1,0 +1,61 @@
+$body-font: "Syne", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+
+$font-size-xs:    0.75rem;  
+$font-size-sm:    0.875rem; 
+$font-size-base:  1rem;     
+$font-size-md:    1.25rem;  
+$font-size-lg:    1.5rem;   
+$font-size-xl:    2rem;     
+$font-size-2xl:   3rem;     
+
+$font-size-small: $font-size-sm;
+$font-size-big:   $font-size-md;
+$font-size-large: $font-size-lg;
+
+$color-bg:           #444444;
+$color-bg-elevated:  #888888;
+$color-container:    #282828;
+$color-bg-alt:       #444444;
+$color-bg-hover:     #9b0856;
+
+$color-primary:       #9b0856;
+$color-primary-hover: #d20d76;
+$color-primary-alt:   #7a0d87;
+$color-accent:        #8c3cfc;
+
+$color-text:       #f5f5f7;
+$color-text-muted: #c8c7c7;
+$color-text-light: #ffffff;
+$color-text-black: #1c1c1c;
+
+$color-border: rgba(255, 255, 255, 0.08);
+
+$color-success: #30d158;
+$color-danger:  #ff453a;
+$color-warning: #ffd60a;
+
+$glass-header: rgba(0, 0, 0, 0.72);
+$glass-nav:    rgba(28, 28, 30, 0.88);
+$glass-player: rgba(22, 22, 23, 0.72);
+$blur-panel:   20px;
+
+$r-sm:   8px;
+$r-md:   12px;
+$r-lg:   16px;
+$r-xl:   20px;
+$r-full: 999px;
+
+$shadow-sm:  0 4px 12px rgba(0, 0, 0, 0.3);
+$shadow-md:  0 8px 24px rgba(0, 0, 0, 0.4);
+$shadow-lg:  0 12px 32px rgba(0, 0, 0, 0.4);
+$shadow-xl:  0 20px 60px rgba(0, 0, 0, 0.5);
+
+$header-h:     64px;
+$nav-w:        72px;
+$player-h:     80px;
+$mobile-nav-h: 64px;
+
+$mobile:  480px;
+$tablet:  768px;
+$desktop: 1024px;
+$wide:    1150px;

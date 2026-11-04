@@ -1,0 +1,49 @@
+@use '../base/variables' as *;
+
+.player {
+    position: fixed;
+    left: 64px;
+    right: 0;
+    bottom: 0;
+    height: 80px;
+    background: rgba(22, 22, 23, 0.72);
+    backdrop-filter: saturate(180%) blur($blur-panel);
+    -webkit-backdrop-filter: saturate(180%) blur($blur-panel);
+    border-top: 1px solid $color-border;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 0 24px;
+    z-index: 1000;
+    box-shadow: 0 -8px 32px rgba(0,0,0,.4);
+
+    &[hidden] { display: none; }
+}
+
+.player__cover {
+    width: 56px; height: 56px;
+    border-radius: $r-sm;
+    object-fit: cover;
+    box-shadow: $shadow-sm;
+}
+
+.player__name { font-weight: 600; letter-spacing: -.01em; }
+.player__artist { color: $color-text-muted; }
+
+.player__btn--play {
+    width: 48px; height: 48px;
+    background: linear-gradient(135deg, $color-primary, $color-primary-alt);
+    box-shadow: 0 4px 12px rgba($color-primary, .4);
+    &:hover { filter: brightness(1.1); transform: scale(1.04); }
+}
+
+.player__progress-bar {
+    height: 4px;
+    background: rgba(255,255,255,.12);
+    border-radius: 2px;
+}
+
+.player__progress-fill {
+    background: linear-gradient(90deg, $color-primary, $color-primary-alt);
+    box-shadow: 0 0 8px rgba($color-primary, .6);
+}

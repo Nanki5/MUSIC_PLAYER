@@ -1,0 +1,131 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family:  "Poppins";
+}
+
+body{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100vh;
+    width: 100%;
+    background-color: #e3edf7;
+}
+
+.player__content{
+    box-shadow:  6px 6px 20px 0px rgba(0, 0, 0, 0.15);
+    width: 350px;
+    border-radius: 20px;
+    padding: 15px 25px;
+}
+.material-symbols-rounded{
+    cursor: pointer;
+}
+
+.player__top-bar{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size:  18px;
+}
+
+.player__top-bar .material-symbols-rounded{
+    font-size: 24px;
+}
+
+.player__music-image{
+    width: 230px;
+    height: 230px;
+    box-shadow: 6px 6px 10px 0px rgba(0, 0, 0, 0.15);
+    border-radius: 10%;
+    margin-top: 25px;
+    background-color: rgb(241, 249, 232);
+}
+
+.player__music-image img{
+    width: 100%;
+    height: 100%;
+    padding: 5px;
+    object-fit:cover;
+    border-radius: 10%;
+}
+.player__image-wrapper{
+   display: flex; 
+   justify-content: center;
+}
+.player__music-titles{
+    text-align: center;
+    margin: 30px;
+    color: #4d4d4d;
+}
+
+.player__music-titles .player__name{
+    font-size: 19px;
+}
+.player__music-titles .player__artist{
+    font-size: 17px;
+    margin-top:  3px;
+    opacity: 0.8;
+}
+.player__progress-details{
+    width:100%;
+    height: 6px;
+    border-radius: 15px;
+    background-color: #ccc;
+}
+.player__progress-bar{
+    width: 10%;
+    height: inherit;
+    border-radius: inherit;
+    background-color: #575a5c;
+    cursor: pointer;
+    position: relative;
+}
+
+.player__progress-bar span{
+    position: absolute;
+    width:16px;
+    height: 12px;
+    background-color: #575a5c;
+    border-radius: inherit;
+    transform:translateY(-25%);
+    right: -5px;
+    opacity: 0;
+    transition: opacity 0.3s ease-out;
+}
+.player__progress-details:hover .player__progress-bar span{
+   opacity: 1; 
+}
+
+.player__time{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+    color: #4d4d4d;
+}
+
+.player__control-button{
+    margin-top: 35px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.player__control-button span{
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    box-shadow: 6px 6px 10px 0px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color:#4d4d4d;
+}
+
+.player__control-button span:active{
+    box-shadow: inset 6px 6px 10px 0px rgba(0, 0, 0, 0.15);
+}

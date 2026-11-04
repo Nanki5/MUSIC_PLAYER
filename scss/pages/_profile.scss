@@ -1,0 +1,43 @@
+@use '../base/variables' as *;
+
+.profile__hero { margin-bottom: 32px; }
+
+.profile__hero-title {
+    font-size: $font-size-large;
+    font-weight: 800;
+    color: $color-text-light;
+    margin-bottom: 8px;
+}
+
+.profile__hero-subtitle {
+    color: $color-text-muted;
+    font-size: $font-size-base;
+}
+
+.profile__filter {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: $color-bg-elevated;
+    border-radius: $r-md;
+}
+
+.profile__filter-label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: $font-size-small;
+    color: $color-text-muted;
+}
+
+.profile__filter-select {
+    padding: 10px 14px;
+    background: $color-bg-alt;
+    color: $color-text;
+    border-radius: $r-md;
+    min-width: 160px;
+    border: 1px solid $color-border;
+}

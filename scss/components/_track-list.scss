@@ -1,0 +1,45 @@
+@use '../base/variables' as *;
+
+.track__list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.track__row {
+    display: grid;
+    grid-template-columns: 56px 1fr auto auto;
+    align-items: center;
+    gap: 16px;
+    padding: 8px 12px;
+    border-radius: $r-md;
+    transition: background .2s;
+
+    &:hover { background: $color-bg-elevated; }
+}
+
+.track__row-cover {
+    width: 56px; height: 56px;
+    border-radius: $r-sm;
+    object-fit: cover;
+    background: $color-bg-alt;
+}
+
+.track__row-info { min-width: 0; }
+
+.track__row-title {
+    font-size: $font-size-small;
+    font-weight: 600;
+    color: $color-text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.track__row-artist,
+.track__row-duration {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+}
+
+.track__row-actions { display: flex; gap: 4px; }
