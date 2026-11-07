@@ -55,7 +55,8 @@ services:
       retries: 12
 
   minio:
-    image: minio/minio:latest
+    image: bitnamilegacy/minio:latest
+    user: "0:0"
     command: server /data --console-address :9001
     ports:
       - "9000:9000"
