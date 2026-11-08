@@ -33,6 +33,7 @@ services:
     volumes:
       - ./public:/var/www/html/public
       - ./src:/var/www/html/src
+      - ./seed.php:/var/www/html/seed.php:ro
     depends_on:
       db:
         condition: service_healthy
