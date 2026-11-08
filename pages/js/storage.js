@@ -91,4 +91,57 @@ const DB = {
         data.playlists = data.playlists.filter(p => p.id !== id);
         this.write(data);
     },
+    //демо-данные 
+    seed() {
+        const data = this.read();
+        if (data.tracks.length || data.playlists.length) return; 
+        const ownerId = data.users[0]?.id || 'seed-owner';
+        const t1 = {
+            id: crypto.randomUUID(),
+            title: 'In The Army Now',
+            artist: 'Status Quo',
+            genre: 'Рок',
+            audio: '../../assets/audio/Status Quo - In The Army Now.mp3',
+            cover: '../../assets/images/images.png',
+            ownerId,
+            isPublic: true,
+            createdAt: Date.now(),
+        };
+        const t2 = {
+            id: crypto.randomUUID(),
+            title: 'Районы-кварталы',
+            artist: 'Звери',
+            genre: 'Поп',
+            audio: '../../assets/audio/Звери - Районы-кварталы.mp3',
+            cover: '../../assets/images/Районы-кварталы.jpg',
+            ownerId,
+            isPublic: true,
+            createdAt: Date.now(),
+        };
+        const t3 = {
+            id: crypto.randomUUID(),
+            title: 'Что такое осень',
+            artist: 'ДДТ',
+            genre: 'Рок',
+            audio: '../../assets/audio/ДДТ – Что такое осень.mp3',
+            cover: '../../assets/images/Что такое осень.jpg',
+            ownerId,
+            isPublic: true,
+            createdAt: Date.now(),
+        };
+
+        const pl = {
+            id: crypto.randomUUID(),
+            name: 'Русская классика',
+            cover: '../../assets/images/images.png',
+            ownerId,
+            isPublic: true,
+            trackIds: [t1.id, t2.id, t3.id],
+            createdAt: Date.now(),
+        };
+
+        data.tracks.push(t1, t2, t3);
+        data.playlists.push(pl);
+        this.write(data);
+    },
 };

@@ -7,18 +7,16 @@ h2 { font-size: $font-size-big;   margin-bottom: 4px; }
 p { margin-bottom: 8px; }
 
 .content {
+    grid-area: content;
     display: grid;
     grid-template-columns: 1fr;
-    margin-top: $header-h;
-    margin-left: $nav-w;
-    padding-bottom: $player-h;
-    min-height: calc(100vh - #{$header-h});
-}
+    min-height: 0;
+    &:has(> .sidebar) {
+        grid-template-columns: 1fr 200px;
+    }
 
-.content--with-sidebar {
-    grid-template-columns: 1fr 280px;
     @media (max-width: $desktop) {
-        grid-template-columns: 1fr;
+        &:has(> .sidebar) { grid-template-columns: 1fr; }
     }
 }
 

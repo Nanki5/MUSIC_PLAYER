@@ -32,3 +32,14 @@ document.addEventListener('DOMContentLoaded', () => {// выбранная ст�
         `;
     }
 });
+const searchButton = document.getElementById('navSearchButton');
+if (searchButton) {
+    searchButton.addEventListener('click', () => {
+        const form = document.querySelector('.search__form');
+        if (!form) return;
+        form.classList.toggle('search__form--open');
+        if (form.classList.contains('search__form--open')) {
+            form.querySelector('.search__form-input').focus();
+        }
+    });
+}
