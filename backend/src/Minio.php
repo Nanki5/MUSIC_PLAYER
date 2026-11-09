@@ -45,7 +45,7 @@ class Minio
                 'Resource' => ['arn:aws:s3:::' . $bucket . '/*'],
             ]],
         ]);
-        $response = self::request('POST', $endpoint . '/' . $bucket . '?policy=', $policy, [
+        $response = self::request('PUT', $endpoint . '/' . $bucket . '?policy=', $policy, [
             'Content-Type' => 'application/json',
         ]);
         if ($response['status'] !== 200 && $response['status'] !== 204) {
