@@ -4,11 +4,12 @@
 @use 'sass:color';
 
 .site__header {
+    grid-area: header;
     display: grid;
     grid-template-columns: max-content 1fr max-content;
     align-items: center;
-    position: fixed;
-    inset: 0 0 auto 0;
+    position: sticky;
+    top: 0;
     height: $header-h;
     background: rgba(13, 13, 13, 0.8);
     backdrop-filter: saturate(180%) blur(20px);
@@ -16,7 +17,6 @@
     gap: 24px;
     padding: 0 24px;
     z-index: 100;
-
     @include adaptive-ui(tablet) {
         height: 56px;
         padding: 0 12px;
@@ -45,7 +45,7 @@
     width: 100%;
     max-width: 480px;
     height: 40px;
-    padding: 0 6px 0 16px;
+    padding: 0 6px 0 10px;
     background: rgba(255, 255, 255, 0.08);
     border-radius: $r-full;
     justify-self: center;
@@ -53,11 +53,38 @@
 
     &:focus-within {
         background: rgba(255, 255, 255, 0.12);
-        box-shadow: 0 0 0 3px rgba($color-primary, .25);
+        box-shadow: 0 0 0 3px rgba($color-primary-hover, .8);
     }
 
     @include adaptive-ui(desktop) { max-width: 320px; }
-    @include adaptive-ui(tablet)  { display: none; }
+    @include adaptive-ui(tablet) {
+        display: none;
+        &--open {
+            display: flex;
+            position: absolute;
+            background: rgba(223, 223, 223, 0.863);
+            top: calc(100% + 15px);
+            left: 300px;
+            right: 300px;
+            height: 44px;
+            margin: 0;
+            padding: 0 12px 0 16px;
+            border-radius: $r-full;
+            border: 1px solid $color-border;
+            box-shadow: $shadow-md;
+            z-index: 200;
+            animation: searchSlideDown .2s ease-out;
+        }
+        &:focus-within {
+        background: rgba(198, 198, 198, 0.407);
+        box-shadow: 0 0 0 3px rgba($color-primary-hover, .9);
+        color: $color-text-black;
+    }
+    }
+}
+@keyframes searchSlideDown {
+    from { opacity: 0; transform: translateY(-8px); }
+    to   { opacity: 1; transform: translateY(0); }
 }
 
 .search__form-input {
@@ -98,7 +125,6 @@
     font-weight: 600;
     border: none;
     transition: background .2s;
-
     &:hover { background: $color-primary-hover; }
 
     &--text {

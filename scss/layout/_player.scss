@@ -1,49 +1,256 @@
 @use '../base/variables' as *;
 
 .player {
-    position: fixed;
-    left: 64px;
-    right: 0;
-    bottom: 0;
-    height: 80px;
-    background: rgba(22, 22, 23, 0.72);
+    position: sticky;
+    bottom: 16px;
+    margin: 16px 24px 16px;  
+    z-index: 50;
+    height: 60px;
+    background: $glass-player;
     backdrop-filter: saturate(180%) blur($blur-panel);
     -webkit-backdrop-filter: saturate(180%) blur($blur-panel);
-    border-top: 1px solid $color-border;
+    border: 1px solid $color-border;
+    border-top: 1px solid $color-primary-alt;
+    border-bottom: 1px solid $color-accent;
+    border-radius: $r-xl;
     display: flex;
     align-items: center;
-    gap: 20px;
-    padding: 0 24px;
-    z-index: 1000;
-    box-shadow: 0 -8px 32px rgba(0,0,0,.4);
+    gap: 16px;
+    padding: 0 20px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, .5);
+    transition: opacity .2s, transform .2s;
 
     &[hidden] { display: none; }
+
+    @media (max-width: $tablet) {
+        height: 64px;
+        bottom: 70px;
+        padding: 0 12px;
+        gap: 12px;
+    }
 }
 
 .player__cover {
-    width: 56px; height: 56px;
+    width: 46px; height: 46px;
     border-radius: $r-sm;
     object-fit: cover;
     box-shadow: $shadow-sm;
 }
 
-.player__name { font-weight: 600; letter-spacing: -.01em; }
-.player__artist { color: $color-text-muted; }
+.player__name { 
+    font-size: $font-size-md;
+    font-family: $body-font;
+    margin: 15px 0px 0px 0px;
+    font-weight: 100; 
+    letter-spacing: -.01em; }
+.player__artist { 
+    font-size: $font-size-sm;
+    font-family: $body-font;
+    margin: 0px 0px 15px 0px;
+    color: $color-text-muted; 
+}
 
-.player__btn--play {
-    width: 48px; height: 48px;
+.player__button--play {
+    width: 40px; height: 40px;
+    border-radius: $r-lg;
     background: linear-gradient(135deg, $color-primary, $color-primary-alt);
     box-shadow: 0 4px 12px rgba($color-primary, .4);
     &:hover { filter: brightness(1.1); transform: scale(1.04); }
 }
 
 .player__progress-bar {
+    flex: 1;
     height: 4px;
+    min-width: 400px;
+    max-width: 1000px;
     background: rgba(255,255,255,.12);
     border-radius: 2px;
+    @media (max-width: $mobile) {
+    display: none;
+  }
 }
 
 .player__progress-fill {
     background: linear-gradient(90deg, $color-primary, $color-primary-alt);
     box-shadow: 0 0 8px rgba($color-primary, .6);
+}
+
+//модалка
+.album-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    z-index: 1100;
+    animation: modalFadeIn .2s ease-out;
+
+    &--open { display: flex; }
+
+    @media (max-width: $tablet) {
+        padding: 0;
+        align-items: stretch;
+    }
+}
+
+@keyframes modalFadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.album-modal__content {
+    background: $color-bg-elevated;
+    border-radius: $r-xl;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    overflow: hidden;
+    box-shadow: $shadow-xl;
+    animation: modalScaleIn .25s ease-out;
+
+    @media (max-width: $tablet) {
+        grid-template-columns: 1fr;
+        max-height: 100vh;
+        border-radius: 0;
+        height: 100vh;
+    }
+}
+
+@keyframes modalScaleIn {
+    from { opacity: 0; transform: scale(.96); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+.album-modal__left {
+    padding: 24px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 0;
+
+    @media (max-width: $tablet) {
+        padding: 16px;
+    }
+}
+
+.album-modal__header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 8px;
+}
+
+.album-modal__title {
+    font-size: $font-size-md;
+    color: $color-text;
+    margin: 0;
+    font-weight: 700;
+}
+
+.album-modal__close {
+    margin-left: auto;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: $color-text-muted;
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    transition: background .2s, color .2s;
+
+    &:hover {
+        background: $color-bg-hover;
+        color: $color-text;
+    }
+}
+
+.album-modal__right {
+    background: $color-container;
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-left: 1px solid $color-border;
+
+    @media (max-width: $tablet) { display: none; }
+}
+
+.mini-player {
+    width: 100%;
+    max-width: 280px;
+}
+
+.mini-player__image {
+    width: 240px;
+    height: 240px;
+    border-radius: $r-lg;
+    box-shadow: $shadow-xl;
+    margin: 0 auto 20px;
+    object-fit: cover;
+    background: $color-bg-alt;
+}
+
+.mini-player__title {
+    text-align: center;
+    font-size: $font-size-md;
+    font-weight: 600;
+    color: $color-text;
+    margin-bottom: 4px;
+}
+
+.mini-player__artist {
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+    margin-bottom: 24px;
+}
+
+.mini-player__controls {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.mini-player__btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    color: $color-text;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: color .2s, transform .1s;
+
+    &:hover  { color: $color-primary; }
+    &:active { transform: scale(.92); }
+
+    &--play {
+        width: 60px;
+        height: 60px;
+        background: $color-text-light;
+        color: $color-text-black;
+        font-size: 30px;
+        box-shadow: $shadow-md;
+
+        &:hover {
+            background: #e5e5e7;
+            color: $color-text-black;
+        }
+    }
 }

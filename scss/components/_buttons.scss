@@ -1,18 +1,6 @@
 @use '../base/variables' as *;
 @use '../components/mixins' as *;
 
-.botton__primary {
-    @include button($color-primary, $color-text-light, $r-full);
-    padding: 10px 24px;
-}
-
-.botton__secondary {
-    @include button($color-bg-alt, $color-text, $r-full);
-    padding: 10px 24px;
-}
-
-.botton__danger { @include button($color-danger, $color-text-light, $r-full); }
-
 .botton__play {
     @include button($color-primary, $color-text-light, 50%);
     width: 40px; height: 40px; padding: 0;
