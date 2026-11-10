@@ -9,13 +9,13 @@ const Player = {
     init() {
         this.audio = document.getElementById('player__audio');
         this.el = document.getElementById('player');
-        this.name   = this.el.querySelector('.player__name');
+        this.name = this.el.querySelector('.player__name');
         this.artist = this.el.querySelector('.player__artist');
-        this.cover  = this.el.querySelector('.player__cover');
-        this.fill   = this.el.querySelector('.player__progress-fill');
-        this.tCur   = this.el.querySelector('.player__time-current');
-        this.tFin   = this.el.querySelector('.player__time-final');
-        this.icon   = this.el.querySelector('#player__play i');
+        this.cover = this.el.querySelector('.player__cover');
+        this.fill = this.el.querySelector('.player__progress-fill');
+        this.timeCur = this.el.querySelector('.player__time-current');
+        this.timeFin = this.el.querySelector('.player__time-final');
+        this.icon = this.el.querySelector('#player__play i');
         this._restore();
 
         this.audio.addEventListener('play',  () => this._save());
