@@ -31,6 +31,10 @@ class Upload
 
     public static function guardPostSize(): void
     {
+        $type = $_SERVER['CONTENT_TYPE'] ?? '';
+        if (stripos($type, 'multipart/form-data') !== 0 && stripos($type, 'application/x-www-form-urlencoded') !== 0) {
+            return;
+        }
         $contentLength = (int)($_SERVER['CONTENT_LENGTH'] ?? 0);
         if ($contentLength > 0 && empty($_POST) && empty($_FILES)) {
             Http::error('Payload Too Large', 413);
