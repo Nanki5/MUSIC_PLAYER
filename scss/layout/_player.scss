@@ -59,22 +59,61 @@
 }
 
 .player__progress-bar {
-    flex: 1;
+    width: 100%;
     height: 4px;
-    min-width: 400px;
-    max-width: 1000px;
     background: rgba(255,255,255,.12);
     border-radius: 2px;
+    cursor: pointer;
+    position: relative;
+}
+.player__progress {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 4px;
+    width: 70%;
+    min-width: 0;
     @media (max-width: $mobile) {
-    display: none;
-  }
+        gap: 2px;
+    }
 }
 
 .player__progress-fill {
-    background: linear-gradient(90deg, $color-primary, $color-primary-alt);
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(1deg, $color-primary-alt, rgb(255, 165, 221));
     box-shadow: 0 0 8px rgba($color-primary, .6);
+    border-radius: inherit;
+    transition: width .25s linear;
+    position: relative;
+     &::after {
+        content: '';
+        position: absolute;
+        right: -6px;
+        top: 50%;
+        transform: translateY(-50%) scale(0);
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: $color-text-light;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, .5);
+        transition: transform .15s;
+    }
 }
-
+.player__progress:hover .player__progress-fill::after {
+    transform: translateY(-50%) scale(0.9);
+}
+.player__time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+    line-height: 1;
+     @media (max-width: $mobile) {
+        font-size: 10px;
+    }
+}
 //модалка
 .album-modal {
     position: fixed;

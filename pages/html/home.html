@@ -59,9 +59,11 @@
         <button class="player__button player__button--play" id="player__play"><i class="ri-play-fill"></i></button>
         <button class="player__button" id="player__next"><i class="ri-skip-forward-fill"></i></button>
         <div class="player__progress">
-            <span class="player__time-current">0:00</span>
             <div class="player__progress-bar" id="player__progress"><div class="player__progress-fill"></div></div>
-            <span class="player__time-final">0:00</span>
+            <div class="player__time">
+                <span class="player__time-current">0:00</span>
+                <span class="player__time-final">0:00</span>
+            </div>
         </div>
         <audio id="player__audio"></audio>
     </div>

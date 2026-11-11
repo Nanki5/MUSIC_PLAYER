@@ -36,10 +36,10 @@ const Player = {
         this.audio.addEventListener('timeupdate', () => {
             if (!this.audio.duration) return;
             this.fill.style.width = (this.audio.currentTime / this.audio.duration * 100) + '%';
-            this.tCur.textContent = this._fmt(this.audio.currentTime);
+            this.timeCur.textContent = this._fmt(this.audio.currentTime);
         });
         this.audio.addEventListener('loadedmetadata', () => {
-            this.tFin.textContent = this._fmt(this.audio.duration);
+            this.timeFin.textContent = this._fmt(this.audio.duration);
         });
         this.audio.addEventListener('ended', () => {
             if (this.queue.length <= 1) {
