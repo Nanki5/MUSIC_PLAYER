@@ -10,6 +10,7 @@ require $base . '/src/Csrf.php';
 require $base . '/src/Validate.php';
 require $base . '/src/Upload.php';
 require $base . '/src/Minio.php';
+require $base . '/src/Multipart.php';
 require $base . '/src/Serializer.php';
 require $base . '/src/Router.php';
 

@@ -41,6 +41,8 @@ class Router
 
         self::cors();
 
+        Multipart::parseForPatch();
+
         if (in_array($method, ['POST', 'PATCH', 'DELETE'], true)) {
             Csrf::check();
         }
