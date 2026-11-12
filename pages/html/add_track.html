@@ -16,21 +16,24 @@
             <img src="../../assets/images/unicorn.svg" alt="Логотип">
             <span class="site__header-brand">UNIMusic</span>
         </a>
-        <form class="search__form" onsubmit="">
-            <input type="search" placeholder="Search..." class="search__form-input">
-            <button type="submit" class="ri-search-line search__form-icon-button"></button>
-        </form>
+        <div class="search">
+            <form class="search__form" id="searchForm" onsubmit="return false;">
+                <input type="search" placeholder="Search..." class="search__form-input" id="searchInput" autocomplete="off">
+                <button type="submit" class="ri-search-line search__form-icon-button"></button>
+            </form>
+            <div class="search__results" id="searchResults" hidden></div>
+        </div>
         <div class="header__auth-group" id="authGroup">
             <a href="login.html" class="button__login">Sign in</a>
         </div>
     </header>
     <nav class="main__nav">
         <ul class="main-nav__list">
-           <li><button class="nav__search-button" id="navSearchButton" aria-label="Поиск"> <i class="ri-search-line"></i></button></li>
-            <li><a href="home.html" class="nav__link"><i class="ri-home-2-line"></i></a></li> <!--<img src="..\..\assets\icons\home-2-line.svg" alt="Домой">-->
-            <li><a href="profile.html" class="nav__link"><i class="ri-user-heart-line"></i></a></li>
-            <li><a href="add_track.html" class="nav__link"><i class="ri-file-music-fill"></i></a></li>
-            <li><a href="about.html" class="nav__link"><i class="ri-information-2-line"></i></a></li>
+            <li><button class="nav__search-button" id="navSearchButton" data-tooltip="Поиск" aria-label="Поиск"> <i class="ri-search-line"></i></button></li>
+            <li><a href="home.html" class="nav__link" data-tooltip="Главная"><i class="ri-home-2-line"></i></a></li> <!--<img src="..\..\assets\icons\home-2-line.svg" alt="Домой">-->
+            <li><a href="profile.html" class="nav__link" data-tooltip="Моя музыка"><i class="ri-user-heart-line"></i></a></li>
+            <li><a href="add_track.html" class="nav__link" data-tooltip="Добавить трек"><i class="ri-file-music-fill"></i></a></li>
+            <li><a href="about.html" class="nav__link" data-tooltip="О сервисе"><i class="ri-information-2-line"></i></a></li>
         </ul>
     </nav>
     <div class="content">
@@ -117,5 +120,6 @@
     <script src="../js/player.js"></script>
     <script src="../js/nav.js"></script>
     <script src="../js/add_track.js"></script> 
+    <script src="../js/search.js"></script>
 </body>
 </html>

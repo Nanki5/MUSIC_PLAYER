@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function openPlaylist(id) {
     const playList = DB.getPlaylist(id);
     if (!playList) return;
-    const tracks = playList.trackIds.map(tracksID => DB.getTracks().find(track => track.id === tracksID)).filter(Boolean);
+    const tracks = playList.trackIds.map(tid => DB.getTracks().find(t => t.id === tid)).filter(Boolean);
     if (!tracks.length) return alert('Плейлист пуст');
 
     const modal = document.createElement('div');
@@ -91,12 +91,12 @@ function openPlaylist(id) {
                     </button>
                 </div>
                 <div class="track__list" style="flex:1; overflow-y:auto;">
-                    ${tracks.map((track, i) => `
+                    ${tracks.map((t, i) => `
                         <article class="track__row" data-i="${i}" style="cursor: pointer;">
-                            <img src="${track.cover || '../../assets/images/images.png'}" alt="" class="track__row-cover">
+                            <img src="${t.cover || '../../assets/images/images.png'}" alt="" class="track__row-cover">
                             <div class="track__row-info">
-                                <h3 class="track__row-title">${track.title}</h3>
-                                <p class="track__row-artist">${track.artist}</p>
+                                <h3 class="track__row-title">${t.title}</h3>
+                                <p class="track__row-artist">${t.artist}</p>
                             </div>
                             <button class="botton__play" data-i="${i}">
                                 <i class="ri-play-fill"></i>
@@ -115,98 +115,91 @@ function openPlaylist(id) {
                         <button class="mini-player__btn mini-player__btn--play" id="miniPlay" type="button"><i class="ri-play-fill"></i></button>
                         <button class="mini-player__btn" id="miniNext" type="button"><i class="ri-skip-forward-fill"></i></button>
                     </div>
-                    <audio id="miniAudio"></audio>
                 </div>
             </div>
         </div>
     `;
-
     document.body.appendChild(modal);
 
     let currentIndex = 0;
-    const audio = modal.querySelector('#miniAudio');
-    const img  = modal.querySelector('#miniImg');
-    const title = modal.querySelector('#miniTitle');
-    const artist = modal.querySelector('#miniArtist');
-    const playBtn = modal.querySelector('#miniPlay');
-
-    function loadMini(index) {
+    function playTrack(index) {
         currentIndex = index;
-        const track = tracks[index];
-        img.src = track.cover || '../../assets/images/images.png';
-        title.textContent = track.title;
-        artist.textContent = track.artist;
-        audio.src = track.audio;
+        Player.play(tracks, index); 
+        updateMiniUI();
     }
 
-    function setPlayingUI(isPlaying) {
-        playBtn.innerHTML = isPlaying ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>';
+    function updateMiniUI() {
+        const t = tracks[currentIndex];
+        modal.querySelector('#miniImg').src       = t.cover || '../../assets/images/images.png';
+        modal.querySelector('#miniTitle').textContent  = t.title;
+        modal.querySelector('#miniArtist').textContent = t.artist;
+        // Иконка miniPlay синхронизируется с Player
+        const isPlaying = Player.playing;
+        modal.querySelector('#miniPlay').innerHTML = isPlaying
+            ? '<i class="ri-pause-fill"></i>'
+            : '<i class="ri-play-fill"></i>';
     }
 
-    function Play() {
-        if (audio.paused) {
-            audio.play();
-            setPlayingUI(true);
+    // Обработчики
+    modal.querySelector('#miniPlay').onclick = () => {
+        if (!Player.queue.length) {
+            Player.play(tracks, currentIndex);
         } else {
-            audio.pause();
-            setPlayingUI(false);
+            Player.toggle();
         }
-    }
-
-    playBtn.onclick = Play;
+        updateMiniUI();
+    };
 
     modal.querySelector('#miniNext').onclick = () => {
-        loadMini((currentIndex + 1) % tracks.length);
-        audio.play();
-        setPlayingUI(true);
-    };
-    modal.querySelector('#miniPrev').onclick = () => {
-        loadMini((currentIndex - 1 + tracks.length) % tracks.length);
-        audio.play();
-        setPlayingUI(true);
+        currentIndex = (currentIndex + 1) % tracks.length;
+        Player.play(tracks, currentIndex);
+        updateMiniUI();
     };
 
+    modal.querySelector('#miniPrev').onclick = () => {
+        currentIndex = (currentIndex - 1 + tracks.length) % tracks.length;
+        Player.play(tracks, currentIndex);
+        updateMiniUI();
+    };
+
+    // Клик по строке — играем через основной плеер
     modal.querySelectorAll('.track__row').forEach((row, i) => {
         row.addEventListener('click', (e) => {
-            const playBtnInside = e.target.closest('.botton__play');
-            if (playBtnInside) return; 
-            loadMini(i);
-            audio.play();
-            setPlayingUI(true);
+            if (e.target.closest('.botton__play')) return;
+            playTrack(i);
         });
     });
-
     modal.querySelectorAll('.botton__play').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.stopPropagation();
-            const i = parseInt(btn.dataset.i, 10);
-            loadMini(i);
-            audio.play();
-            setPlayingUI(true);
+            playTrack(parseInt(btn.dataset.i, 10));
         });
     });
 
-    //автопереход
-    audio.onended = () => {
-        loadMini((currentIndex + 1) % tracks.length);
-        audio.play();
-        setPlayingUI(true);
-    };
-
+    // Закрытие — НЕ трогаем Player, музыка продолжает играть
     function close() {
-        audio.pause();
         modal.remove();
         document.removeEventListener('keydown', onEsc);
     }
-    function onEsc(e) {
-        if (e.key === 'Escape') close();
-    }
+    function onEsc(e) { if (e.key === 'Escape') close(); }
     document.addEventListener('keydown', onEsc);
-
     modal.querySelector('.album-modal__close').onclick = close;
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) close();
-    });
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
 
-    loadMini(0);
+    // Инициализация mini-UI
+    if (Player.queue.length) {
+        // если в основном плеере уже играет что-то из этого плейлиста — синхронизируем
+        const idx = tracks.findIndex(t => t.id === Player.queue[Player.index]?.id);
+        if (idx >= 0) currentIndex = idx;
+    }
+    updateMiniUI();
+
+    // Подписка на изменения Player, чтобы иконка play/pause обновлялась
+    const syncInterval = setInterval(() => {
+        if (!document.body.contains(modal)) {
+            clearInterval(syncInterval);
+            return;
+        }
+        updateMiniUI();
+    }, 300);
 }

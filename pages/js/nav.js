@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {// выбранная страница
+document.addEventListener('DOMContentLoaded', () => {
     const path = window.location.pathname;
     document.querySelectorAll('.nav__link').forEach(link => {
         const href = link.getAttribute('href');
@@ -22,24 +22,23 @@ document.addEventListener('DOMContentLoaded', () => {// выбранная ст�
             </button>
         `;
         document.getElementById('logoutBtn').onclick = () => {
-    if (confirm('Вы уверены, что хотите выйти?')) {
-        Auth.logout();
-    }
-};
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                Auth.logout();
+            }
+        };
     } else {
         authGroup.innerHTML = `
             <a href="login.html" class="button__login button__login--text">Sign in</a>
         `;
     }
+    const searchButton = document.getElementById('navSearchButton');
+    if (searchButton) {
+        searchButton.addEventListener('click', () => {
+        const search = document.querySelector('.search');
+        if (!search) return;
+        search.classList.toggle('search--open');
+        if (search.classList.contains('search--open')) {
+            search.querySelector('.search__form-input')?.focus();
+        }});
+    }
 });
-const searchButton = document.getElementById('navSearchButton');
-if (searchButton) {
-    searchButton.addEventListener('click', () => {
-        const form = document.querySelector('.search__form');
-        if (!form) return;
-        form.classList.toggle('search__form--open');
-        if (form.classList.contains('search__form--open')) {
-            form.querySelector('.search__form-input').focus();
-        }
-    });
-}
