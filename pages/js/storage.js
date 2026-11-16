@@ -91,6 +91,34 @@ const DB = {
         data.playlists = data.playlists.filter(p => p.id !== id);
         this.write(data);
     },
+
+    getFavorites() {
+        const data = this.read();
+        if (!Array.isArray(data.favorites)) data.favorites = [];
+        return data.favorites;
+    },
+
+    getFavoriteTracks(uid) {
+        const ids = this.getFavorites();
+        const tracks = this.getTracks();
+        return ids
+            .map(id => tracks.find(t => t.id === id))
+            .filter(Boolean);
+    },
+
+    isFavorite(trackId) {
+        return this.getFavorites().includes(trackId);
+    },
+
+    toggleFavorite(trackId) {
+        const data = this.read();
+        if (!Array.isArray(data.favorites)) data.favorites = [];
+        const i = data.favorites.indexOf(trackId);
+        if (i === -1) data.favorites.push(trackId);
+        else data.favorites.splice(i, 1);
+        this.write(data);
+        return data.favorites.includes(trackId); 
+    },
     //демо-данные 
     seed() {
         const data = this.read();
@@ -145,3 +173,16 @@ const DB = {
         this.write(data);
     },
 };
+
+function favoriteIconHTML(trackId) {
+    const active = DB.isFavorite(trackId);
+    return `<i class="${active ? 'ri-heart-fill' : 'ri-heart-line'}"></i>`;
+}
+
+function refreshFavoriteButton(btn, trackId) {
+    const active = DB.isFavorite(trackId);
+    btn.classList.toggle('botton__favorite--active', active);
+    btn.innerHTML = active
+        ? '<i class="ri-heart-fill"></i>'
+        : '<i class="ri-heart-line"></i>';
+}

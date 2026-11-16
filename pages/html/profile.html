@@ -64,8 +64,14 @@
             </section>
 
             <section class="section">
-                <div class="track__list">
-                    <!-- сюда костян добавлем сохраненные-->
+                <h2 class="section__title">Избранное</h2>
+                <div class="track__list" id="favoriteList">
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section__title">Мои треки</h2>
+                <div class="track__list" id="myTrackList">
                 </div>
             </section>
         </main>
@@ -74,12 +80,6 @@
             <ul class="sidebar__list">
                 <li>Всего треков: <strong id="totalCount">3</strong></li>
                 <li>В избранном: <strong id="favoriteCount">2</strong></li>
-            </ul>
-
-            <h3 class="sidebar__title">Быстрые действия</h3>
-            <ul class="sidebar__list">
-                <li><a href="add_track.html" class="sidebar__link">+ Добавить трек</a></li>
-                <li><a href="home.html" class="sidebar__link">На главную</a></li>
             </ul>
         </aside>
         <div class="player" id="player" hidden>

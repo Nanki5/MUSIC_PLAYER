@@ -38,16 +38,23 @@
 }
 
 .player__name { 
+    height: 1.5em;
     font-size: $font-size-md;
     font-family: $body-font;
     margin: 15px 0px 0px 0px;
     font-weight: 100; 
-    letter-spacing: -.01em; }
+    letter-spacing: -.01em;
+    text-overflow: ellipsis;
+    overflow:hidden;
+ }
 .player__artist { 
+    height: 1.5em;
     font-size: $font-size-sm;
     font-family: $body-font;
     margin: 0px 0px 15px 0px;
     color: $color-text-muted; 
+     text-overflow: ellipsis;
+    overflow:hidden;
 }
 
 .player__button--play {

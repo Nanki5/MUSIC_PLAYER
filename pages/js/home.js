@@ -25,19 +25,31 @@ document.addEventListener('DOMContentLoaded', () => {
     const popular = DB.getPublicTracks().slice(0, 8);
     const trackRows = document.querySelectorAll('.album-row');
     if (trackRows[1] && popular.length) {
-        trackRows[1].innerHTML = popular.map((track, i) => `
-            <article class="track__card" data-track-id="${track.id}">
-                <img src="${track.cover || '../../assets/images/images.png'}" alt="" class="track__card-cover">
-                <h3 class="track__card-title">${track.title}</h3>
-                <p class="track__card-artist">${track.artist}</p>
-                <div class="track__card-actions">
-                    <button class="botton__play" data-play="${i}"><i class="ri-play-fill"></i></button>
-                    <button class="botton__favorite"><i class="ri-heart-line"></i></button>
-                </div>
-            </article>
-        `).join('');
+        trackRows[1].innerHTML = popular.map((track, i) => {
+            const fav = DB.isFavorite(track.id);
+            return `
+                <article class="track__card" data-track-id="${track.id}">
+                    <img src="${track.cover || '../../assets/images/images.png'}" alt="" class="track__card-cover">
+                    <h3 class="track__card-title">${escapeHtml(track.title)}</h3>
+                    <p class="track__card-artist">${escapeHtml(track.artist)}</p>
+                    <div class="track__card-actions">
+                        <button class="botton__play" data-play="${i}"><i class="ri-play-fill"></i></button>
+                        <button class="botton__favorite ${fav ? 'botton__favorite--active' : ''}" data-fav="${track.id}">
+                            <i class="${fav ? 'ri-heart-fill' : 'ri-heart-line'}"></i>
+                        </button>
+                    </div>
+                </article>
+            `;
+        }).join('');
 
         trackRows[1].addEventListener('click', e => {
+            const favBtn = e.target.closest('.botton__favorite');
+            if (favBtn) {
+                const id = favBtn.dataset.fav;
+                DB.toggleFavorite(id);
+                refreshFavoriteButton(favBtn, id);
+                return;
+            }
             const button = e.target.closest('[data-play]');
             if (button) {
                 const i = parseInt(button.dataset.play);
@@ -48,22 +60,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const allTracks = document.querySelector('.track__list');
     if (allTracks && popular.length) {
-        allTracks.innerHTML = popular.map((track, i) => `
-            <article class="track__row" data-track-id="${track.id}">
-                <img src="${track.cover || '../../assets/images/images.png'}" alt="" class="track__row-cover">
-                <div class="track__row-info">
-                    <h3 class="track__row-title">${track.title}</h3>
-                    <p class="track__row-artist">${track.artist}</p>
-                </div>
-                <span class="track__row-duration"></span>
-                <div class="track__row-actions">
-                    <button class="botton__play" data-play="${i}"><i class="ri-play-fill"></i></button>
-                    <button class="botton__favorite"><i class="ri-heart-line"></i></button>
-                </div>
-            </article>
-        `).join('');
+        allTracks.innerHTML = popular.map((track, i) => {
+            const fav = DB.isFavorite(track.id);
+            return `
+                <article class="track__row" data-track-id="${track.id}">
+                    <img src="${track.cover || '../../assets/images/images.png'}" alt="" class="track__row-cover">
+                    <div class="track__row-info">
+                        <h3 class="track__row-title">${escapeHtml(track.title)}</h3>
+                        <p class="track__row-artist">${escapeHtml(track.artist)}</p>
+                    </div>
+                    <span class="track__row-duration"></span>
+                    <div class="track__row-actions">
+                        <button class="botton__play" data-play="${i}"><i class="ri-play-fill"></i></button>
+                        <button class="botton__favorite ${fav ? 'botton__favorite--active' : ''}" data-fav="${track.id}">
+                            <i class="${fav ? 'ri-heart-fill' : 'ri-heart-line'}"></i>
+                        </button>
+                    </div>
+                </article>
+            `;
+        }).join('');
 
         allTracks.addEventListener('click', e => {
+            const favBtn = e.target.closest('.botton__favorite');
+            if (favBtn) {
+                const id = favBtn.dataset.fav;
+                DB.toggleFavorite(id);
+                refreshFavoriteButton(favBtn, id);
+                return;
+            }
             const button = e.target.closest('[data-play]');
             if (button) {
                 const i = parseInt(button.dataset.play);
@@ -176,7 +200,6 @@ function openPlaylist(id) {
         });
     });
 
-    // Закрытие — НЕ трогаем Player, музыка продолжает играть
     function close() {
         modal.remove();
         document.removeEventListener('keydown', onEsc);
@@ -186,15 +209,12 @@ function openPlaylist(id) {
     modal.querySelector('.album-modal__close').onclick = close;
     modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
 
-    // Инициализация mini-UI
     if (Player.queue.length) {
-        // если в основном плеере уже играет что-то из этого плейлиста — синхронизируем
         const idx = tracks.findIndex(t => t.id === Player.queue[Player.index]?.id);
         if (idx >= 0) currentIndex = idx;
     }
     updateMiniUI();
 
-    // Подписка на изменения Player, чтобы иконка play/pause обновлялась
     const syncInterval = setInterval(() => {
         if (!document.body.contains(modal)) {
             clearInterval(syncInterval);
@@ -202,4 +222,9 @@ function openPlaylist(id) {
         }
         updateMiniUI();
     }, 300);
+}
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    }[c]));
 }

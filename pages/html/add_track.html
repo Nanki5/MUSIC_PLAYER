@@ -45,10 +45,10 @@
             <section class="section">
                 <form class="track__form" id="addTrackForm">
                     <label class="track__label">Название:
-                        <input type="text" name="title" class="track__input" required>
+                        <input type="text" name="title" class="track__input" required placeholder="Что за трек?">
                     </label>
                     <label class="track__label">Исполнитель:
-                        <input type="text" name="artist" class="track__input" required>
+                        <input type="text" name="artist" class="track__input" required placeholder="Кто поёт?">
                     </label>
                     <label class="track__label">Жанр:
                         <select name="genre" class="track__select">
@@ -59,12 +59,10 @@
                         </select>
                     </label>
                     <label class="track__label">Аудио (путь к файлу):
-                        <select name="audio" class="track__select" id="audioSelect" required>
-                        </select>
+                        <input type="file" name="audioFile" class="track__file" id="audioFile" accept="audio/*" required>
                     </label>
                     <label class="track__label">Обложка:
-                        <select name="cover" class="track__select" id="coverSelect" required>
-                        </select>
+                         <input type="file" name="coverFile" class="track__file" id="coverFile" accept="image/*" required>
                     </label>
                     <label class="track__label">
                         <input type="checkbox" name="isPublic">
@@ -78,17 +76,11 @@
             </section>
         </main>
         <aside class="sidebar">
-            <h3 class="sidebar__title">Подсказки</h3>
             <ul class="sidebar__list">
                 <li>Заполните все обязательные поля</li>
                 <li>Обложка: JPG или PNG, до 5 МБ</li>
                 <li>Год: от 1900</li>
                 <li>Описание — необязательно</li>
-            </ul>
-            <h3 class="sidebar__title">Навигация</h3>
-            <ul class="sidebar__list">
-                <li><a href="profile.html" class="sidebar__link">Моя музыка</a></li>
-                <li><a href="home.html" class="sidebar__link">На главную</a></li>
             </ul>
         </aside>
         <div class="player" id="player" hidden>
