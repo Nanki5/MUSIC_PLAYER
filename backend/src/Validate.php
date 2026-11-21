@@ -4,7 +4,10 @@ class Validate
 {
     public static function login(string $value): string
     {
-        if (preg_match('/^[a-zA-Z0-9_.]{3,50}$/', $value) !== 1) {
+        $valid = strlen($value) >= 3
+            && strlen($value) <= 50
+            && preg_match('/^[a-zA-Z0-9_.]+(?:@[a-zA-Z0-9_.]+)?$/', $value) === 1;
+        if (!$valid) {
             Http::error('Invalid login', 422);
         }
         return $value;
