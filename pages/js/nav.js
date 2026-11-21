@@ -34,6 +34,16 @@ document.addEventListener('DOMContentLoaded', async () => {
             <a href="login.html" class="button__login button__login--text">Sign in</a>
         `;
     }
+    const searchButton = document.getElementById('navSearchButton');
+    if (searchButton) {
+        searchButton.addEventListener('click', () => {
+        const search = document.querySelector('.search');
+        if (!search) return;
+        search.classList.toggle('search--open');
+        if (search.classList.contains('search--open')) {
+            search.querySelector('.search__form-input')?.focus();
+        }});
+    }
 });
 
 // 3. Кнопка поиска
@@ -48,3 +58,4 @@ if (searchButton) {
         }
     });
 }
+

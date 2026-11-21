@@ -5,22 +5,22 @@ const Player = {
     playing: false,
     STORAGE_KEY: 'unimusic-player',
     _restoring: false,
+    _saveTimer: null,
 
     init() {
         this.audio = document.getElementById('player__audio');
         this.el = document.getElementById('player');
-        this.name   = this.el.querySelector('.player__name');
+        this.name = this.el.querySelector('.player__name');
         this.artist = this.el.querySelector('.player__artist');
-        this.cover  = this.el.querySelector('.player__cover');
-        this.fill   = this.el.querySelector('.player__progress-fill');
-        this.tCur   = this.el.querySelector('.player__time-current');
-        this.tFin   = this.el.querySelector('.player__time-final');
-        this.icon   = this.el.querySelector('#player__play i');
+        this.cover = this.el.querySelector('.player__cover');
+        this.fill = this.el.querySelector('.player__progress-fill');
+        this.timeCur = this.el.querySelector('.player__time-current');
+        this.timeFin = this.el.querySelector('.player__time-final');
+        this.icon = this.el.querySelector('#player__play i');
         this._restore();
 
         this.audio.addEventListener('play',  () => this._save());
         this.audio.addEventListener('pause', () => this._save());
-        this.audio.addEventListener('timeupdate', () => this._save(false));
 
         this.el.querySelector('#player__play').addEventListener('click', () => this.toggle());
         this.el.querySelector('#player__prev').addEventListener('click', () => this.prev());
@@ -36,11 +36,14 @@ const Player = {
         this.audio.addEventListener('timeupdate', () => {
             if (!this.audio.duration) return;
             this.fill.style.width = (this.audio.currentTime / this.audio.duration * 100) + '%';
-            this.tCur.textContent = this._fmt(this.audio.currentTime);
+            this.timeCur.textContent = this._fmt(this.audio.currentTime);
         });
+
         this.audio.addEventListener('loadedmetadata', () => {
+            if (!this.audio.duration || isNaN(this.audio.duration)) return;
             this.tFin.textContent = this._fmt(this.audio.duration);
         });
+
         this.audio.addEventListener('ended', () => {
             if (this.queue.length <= 1) {
                 this.playing = false;
@@ -49,22 +52,30 @@ const Player = {
             }
             this.next();
         });
+        // Сохранение при выходе
+        this._bindPersistence();
     },
 
-    _fmt(sec) {
-        const m = Math.floor(sec / 60);
-        const s = String(Math.floor(sec % 60)).padStart(2, '0');
-        return `${m}:${s}`;
+    _bindPersistence() {
+        window.addEventListener('beforeunload', () => this._save(true));
+        window.addEventListener('pagehide', () => this._save(true));
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'hidden') this._save(true);
+        });
+        if (this._saveTimer) clearInterval(this._saveTimer);
+        this._saveTimer = setInterval(() => {
+            if (this.playing) this._save(true);
+        }, 2000);
     },
 
     _save(saveTime = true) {
         const t = this.queue[this.index];
         if (!t) return;
-        if (this._restoring) return; 
+        if (this._restoring) return;
         const state = {
             queue: this.queue,
             index: this.index,
-            time:  saveTime ? this.audio.currentTime : undefined,
+            time:  saveTime ? (this.audio.currentTime || 0) : undefined,
             playing: this.playing,
         };
         try {
@@ -76,12 +87,9 @@ const Player = {
         const raw = localStorage.getItem(this.STORAGE_KEY);
         if (!raw) return;
         let state;
-        try {
-            state = JSON.parse(raw);
-        } catch {
-            return;
-        }
+        try { state = JSON.parse(raw); } catch { return; }
         if (!state || !Array.isArray(state.queue) || !state.queue.length) return;
+
         this._restoring = true;
         this.queue = state.queue;
         this.index = Math.min(state.index || 0, this.queue.length - 1);
@@ -89,16 +97,32 @@ const Player = {
         this.load();
         this.el.hidden = false;
 
-        if (state.time) {
-            const onMeta = () => {
-                try { this.audio.currentTime = state.time; } catch {}
-                this.audio.removeEventListener('loadedmetadata', onMeta);
-            };
-            this.audio.addEventListener('loadedmetadata', onMeta);
+        const applyTime = () => {
+            if (!state.time) return;
+            try {
+                this.audio.currentTime = state.time;
+                if (this.audio.duration) {
+                    this.fill.style.width = (state.time / this.audio.duration * 100) + '%';
+                }
+                this.timeCur.textContent = this._fmt(state.time);
+            } catch {}
+        };
+
+        if (this.audio.readyState >= 1) {
+            applyTime();
+        } else {
+            this.audio.addEventListener('loadedmetadata', applyTime, { once: true });
         }
+
         this.playing = false;
         this._updateIcon();
         this._restoring = false;
+    },
+
+    _fmt(sec) {
+        const m = Math.floor(sec / 60);
+        const s = String(Math.floor(sec % 60)).padStart(2, '0');
+        return `${m}:${s}`;
     },
 
     play(tracks, startIndex = 0) {
@@ -120,6 +144,7 @@ const Player = {
         this.cover.src = t.cover || '../../assets/images/images.png';
         this.audio.src = t.audio;
     },
+
     toggle() {
         if (!this.queue.length) return;
         if (this.audio.paused) {

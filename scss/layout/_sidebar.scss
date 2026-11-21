@@ -1,9 +1,11 @@
 @use '../base/variables' as *;
 
 .sidebar {
+    height: calc(42vh - #{$header-h});
     padding: 32px 24px;
     background: $color-bg-elevated;
     border-left: 1px solid $color-border;
+    border-radius: 0 0 0 2rem ;
 
     @media (max-width: $desktop) { display: none; }
 }

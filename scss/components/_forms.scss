@@ -2,6 +2,7 @@
 @use '../components/mixins' as *;
 
 .track__form {
+    margin-left: auto;
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -33,36 +34,4 @@
     display: flex;
     gap: 12px;
     margin-top: 8px;
-}
-@mixin auth-page {
-    min-height: 100vh;
-    display: grid;
-    place-items: center;
-    background: $color-bg;
-    color: $color-text;
-    padding: 24px;
-}
-
-@mixin auth-box {
-    width: 100%;
-    max-width: 420px;
-    background: $color-container;
-    border: 1px solid $color-border;
-    padding: 48px 32px;
-    border-radius: $r-xl;
-    box-shadow: $shadow-xl;
-    margin: 0 auto;
-}
-
-@mixin auth-field {
-    position: relative;
-    height: 52px;
-    background: $color-bg-alt;
-    border: 1px solid $color-border;
-    border-radius: $r-full;
-    display: flex;
-    align-items: center;
-    transition: border-color .2s;
-
-    &:focus-within { border-color: $color-primary; }
 }
