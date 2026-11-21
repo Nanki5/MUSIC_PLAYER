@@ -1,84 +1,124 @@
-document.addEventListener('DOMContentLoaded', () => {
-    DB.seed();
-    const playlists = DB.getPublicPlaylists();//загрузка публичных
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Загружаем плейлисты пользователя (если авторизован)
     const albumRow = document.querySelector('.album-row');
     if (albumRow) {
-        if (playlists.length) {
-            albumRow.innerHTML = playlists.map(pl => `
-                <article class="album-card" data-id="${pl.id}">
-                    <img src="${pl.cover || '../../assets/images/images.png'}" alt="" class="album-card__cover">
-                    <h3 class="album-card__title">${pl.name}</h3>
-                    <p class="album-card__subtitle">${pl.trackIds.length} треков</p>
-                </article>
-            `).join('');
+        try {
+            const user = await API.getCurrentUser();
+            const playlists = user ? await API.getMyPlaylists() : [];
 
-            albumRow.addEventListener('click', e => {
-                const card = e.target.closest('.album-card');
-                if (!card) return;
-                openPlaylist(card.dataset.id);
-            });
-        } else {
-            albumRow.innerHTML = '<p style="color: var(--color-text-muted, #a1a1a6)">Плейлистов пока нет.</p>';
+            if (playlists.length) {
+                albumRow.innerHTML = playlists.map(pl => `
+                    <article class="album-card" data-id="${pl.id}">
+                        <img src="${pl.cover}" alt="" class="album-card__cover">
+                        <h3 class="album-card__title">${pl.name}</h3>
+                    </article>
+                `).join('');
+
+                albumRow.addEventListener('click', e => {
+                    const card = e.target.closest('.album-card');
+                    if (card) openPlaylist(card.dataset.id);
+                });
+            } else {
+                albumRow.innerHTML = '<p style="color: var(--color-text-muted, #a1a1a6)">Плейлистов пока нет.</p>';
+            }
+        } catch (err) {
+            console.error('Ошибка загрузки плейлистов:', err);
         }
     }
 
-    const popular = DB.getPublicTracks().slice(0, 8);
+    // 2. Загружаем «Популярное» (по лайкам) и «Все треки» (новые сверху)
+    let popular = [];
+    let all = [];
+    try {
+        [popular, all] = await Promise.all([
+            API.getPopularTracks(8),
+            API.getTracks({ sort: 'uploaded_at', limit: 20 }),
+        ]);
+    } catch (err) {
+        console.error('Ошибка загрузки треков:', err);
+    }
+
+    // Рендер блока «Популярное» (второй блок .album-row на странице)
     const trackRows = document.querySelectorAll('.album-row');
     if (trackRows[1] && popular.length) {
         trackRows[1].innerHTML = popular.map((t, i) => `
             <article class="track__card" data-track-id="${t.id}">
-                <img src="${t.cover || '../../assets/images/images.png'}" alt="" class="track__card-cover">
+                <img src="${t.cover}" alt="" class="track__card-cover">
                 <h3 class="track__card-title">${t.title}</h3>
                 <p class="track__card-artist">${t.artist}</p>
                 <div class="track__card-actions">
                     <button class="botton__play" data-play="${i}"><i class="ri-play-fill"></i></button>
-                    <button class="botton__favorite"><i class="ri-heart-line"></i></button>
+                    <button class="botton__favorite" data-like="${t.id}" title="Лайк (${t.likeCount})">
+                        <i class="ri-heart-line"></i>
+                    </button>
                 </div>
             </article>
         `).join('');
 
-        trackRows[1].addEventListener('click', e => {
-            const btn = e.target.closest('[data-play]');
-            if (btn) {
-                const i = parseInt(btn.dataset.play);
-                Player.play(popular, i);
-            }
-        });
+        bindTrackEvents(trackRows[1], popular);
     }
 
-    const allTracks = document.querySelector('.track__list');
-    if (allTracks && popular.length) {
-        allTracks.innerHTML = popular.map((t, i) => `
+    // Рендер списка «Все треки»
+    const allTracksEl = document.querySelector('.track__list');
+    if (allTracksEl && all.length) {
+        allTracksEl.innerHTML = all.map((t, i) => `
             <article class="track__row" data-track-id="${t.id}">
-                <img src="${t.cover || '../../assets/images/images.png'}" alt="" class="track__row-cover">
+                <img src="${t.cover}" alt="" class="track__row-cover">
                 <div class="track__row-info">
                     <h3 class="track__row-title">${t.title}</h3>
                     <p class="track__row-artist">${t.artist}</p>
                 </div>
-                <span class="track__row-duration"></span>
+                <span class="track__row-duration">♥ ${t.likeCount}</span>
                 <div class="track__row-actions">
                     <button class="botton__play" data-play="${i}"><i class="ri-play-fill"></i></button>
-                    <button class="botton__favorite"><i class="ri-heart-line"></i></button>
+                    <button class="botton__favorite" data-like="${t.id}"><i class="ri-heart-line"></i></button>
                 </div>
             </article>
         `).join('');
 
-        allTracks.addEventListener('click', e => {
-            const btn = e.target.closest('[data-play]');
-            if (btn) {
-                const i = parseInt(btn.dataset.play);
-                Player.play(popular, i);
-            }
-        });
+        bindTrackEvents(allTracksEl, all);
     }
 });
 
-function openPlaylist(id) {
-    const playList = DB.getPlaylist(id);
-    if (!playList) return;
-    const tracks = playList.trackIds
-        .map(tid => DB.getTracks().find(t => t.id === tid))
-        .filter(Boolean);
+// Единый обработчик для кнопок Play и Like
+function bindTrackEvents(container, tracksList) {
+    container.addEventListener('click', async e => {
+        const playBtn = e.target.closest('[data-play]');
+        if (playBtn) {
+            const i = parseInt(playBtn.dataset.play, 10);
+            Player.play(tracksList, i);
+            return;
+        }
+
+        const likeBtn = e.target.closest('[data-like]');
+        if (likeBtn) {
+            const songId = likeBtn.dataset.like;
+            try {
+                const res = await API.toggleLike(songId);
+                const icon = likeBtn.querySelector('i');
+                icon.className = res.liked ? 'ri-heart-fill' : 'ri-heart-line';
+            } catch (err) {
+                if (err.status === 401) {
+                    alert('Войдите в аккаунт, чтобы ставить лайки');
+                    location.href = 'login.html';
+                } else {
+                    alert(err.message);
+                }
+            }
+        }
+    });
+}
+
+// Модальное окно плейлиста
+async function openPlaylist(id) {
+    let playList;
+    try {
+        playList = await API.getPlaylist(id);
+    } catch (err) {
+        return alert(err.message);
+    }
+
+    const tracks = playList.tracks;
     if (!tracks.length) return alert('Плейлист пуст');
 
     const modal = document.createElement('div');
@@ -95,7 +135,7 @@ function openPlaylist(id) {
                 <div class="track__list" style="flex:1; overflow-y:auto;">
                     ${tracks.map((t, i) => `
                         <article class="track__row" data-i="${i}" style="cursor: pointer;">
-                            <img src="${t.cover || '../../assets/images/images.png'}" alt="" class="track__row-cover">
+                            <img src="${t.cover}" alt="" class="track__row-cover">
                             <div class="track__row-info">
                                 <h3 class="track__row-title">${t.title}</h3>
                                 <p class="track__row-artist">${t.artist}</p>
@@ -109,7 +149,7 @@ function openPlaylist(id) {
             </div>
             <div class="album-modal__right">
                 <div class="mini-player">
-                    <img src="${tracks[0].cover || '../../assets/images/images.png'}" alt="" class="mini-player__image" id="miniImg">
+                    <img src="${tracks[0].cover}" alt="" class="mini-player__image" id="miniImg">
                     <h3 class="mini-player__title" id="miniTitle">${tracks[0].title}</h3>
                     <p class="mini-player__artist" id="miniArtist">${tracks[0].artist}</p>
                     <div class="mini-player__controls">
@@ -135,86 +175,39 @@ function openPlaylist(id) {
     function loadMini(index) {
         currentIndex = index;
         const t = tracks[index];
-        img.src          = t.cover || '../../assets/images/images.png';
+        img.src            = t.cover;
         title.textContent  = t.title;
         artist.textContent = t.artist;
-        audio.src        = t.audio;
+        audio.src          = t.audio;
     }
 
     function setPlayingUI(isPlaying) {
-        playBtn.innerHTML = isPlaying
-            ? '<i class="ri-pause-fill"></i>'
-            : '<i class="ri-play-fill"></i>';
+        playBtn.innerHTML = isPlaying ? '<i class="ri-pause-fill"></i>' : '<i class="ri-play-fill"></i>';
     }
 
-    function togglePlay() {
-        if (audio.paused) {
-            audio.play();
-            setPlayingUI(true);
-        } else {
-            audio.pause();
-            setPlayingUI(false);
-        }
-    }
-
-    // ===== Обработчики =====
-    playBtn.onclick = togglePlay;
-
-    modal.querySelector('#miniNext').onclick = () => {
-        loadMini((currentIndex + 1) % tracks.length);
-        audio.play();
-        setPlayingUI(true);
-    };
-    modal.querySelector('#miniPrev').onclick = () => {
-        loadMini((currentIndex - 1 + tracks.length) % tracks.length);
-        audio.play();
-        setPlayingUI(true);
+    playBtn.onclick = () => {
+        if (audio.paused) { audio.play(); setPlayingUI(true); }
+        else { audio.pause(); setPlayingUI(false); }
     };
 
-    // Клик по строке трека — играем с неё
+    modal.querySelector('#miniNext').onclick = () => { loadMini((currentIndex + 1) % tracks.length); audio.play(); setPlayingUI(true); };
+    modal.querySelector('#miniPrev').onclick = () => { loadMini((currentIndex - 1 + tracks.length) % tracks.length); audio.play(); setPlayingUI(true); };
+
     modal.querySelectorAll('.track__row').forEach((row, i) => {
-        row.addEventListener('click', (e) => {
-            const playBtnInside = e.target.closest('.botton__play');
-            if (playBtnInside) return; // обработаем ниже
-            loadMini(i);
-            audio.play();
-            setPlayingUI(true);
-        });
+        row.addEventListener('click', () => { loadMini(i); audio.play(); setPlayingUI(true); });
     });
 
-    // Клик по кнопке play в строке
-    modal.querySelectorAll('.botton__play').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const i = parseInt(btn.dataset.i, 10);
-            loadMini(i);
-            audio.play();
-            setPlayingUI(true);
-        });
-    });
+    audio.onended = () => { loadMini((currentIndex + 1) % tracks.length); audio.play(); setPlayingUI(true); };
 
-    // Автопереход
-    audio.onended = () => {
-        loadMini((currentIndex + 1) % tracks.length);
-        audio.play();
-        setPlayingUI(true);
-    };
-
-    // Закрытие
     function close() {
         audio.pause();
         modal.remove();
         document.removeEventListener('keydown', onEsc);
     }
-    function onEsc(e) {
-        if (e.key === 'Escape') close();
-    }
+    const onEsc = e => { if (e.key === 'Escape') close(); };
     document.addEventListener('keydown', onEsc);
-
     modal.querySelector('.album-modal__close').onclick = close;
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) close();
-    });
+    modal.addEventListener('click', e => { if (e.target === modal) close(); });
 
     loadMini(0);
 }

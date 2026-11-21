@@ -1,40 +1,34 @@
-const AVAILABLE_AUDIO = [
-    'Status Quo - In The Army Now',
-    'Районы-кварталы',
-    'ДДТ – Что такое осень',
-    'Opus - Live is life',
-];
-const AVAILABLE_COVERS = ['images', 'Районы-кварталы', 'Что такое осень', 'images'];
+document.addEventListener('DOMContentLoaded', async () => {
+    const user = await API.requireAuth('login.html');
+    if (!user) return;
 
-document.addEventListener('DOMContentLoaded', () => {
-    Auth.requireAuth('login.html'); 
-    const audioSel = document.getElementById('audioSelect');
-    const coverSel = document.getElementById('coverSelect');
-
-    AVAILABLE_AUDIO.forEach(name => {
-        audioSel.insertAdjacentHTML('beforeend',
-            `<option value="../../assets/audio/${name}.mp3">${name}</option>`);
-    });
-    AVAILABLE_COVERS.forEach(name => {
-        coverSel.insertAdjacentHTML('beforeend',
-            `<option value="../../assets/images/${name}.jpg">${name}</option>`);
-    });
-
-    document.getElementById('addTrackForm').addEventListener('submit', e => {
+    document.getElementById('addTrackForm').addEventListener('submit', async e => {
         e.preventDefault();
         const f = e.target;
-        const user = DB.getCurrentUser();
-        DB.addTrack({
-            title:    f.title.value.trim(),
-            artist:   f.artist.value.trim(),
-            genre:    f.genre.value,
-            audio:    f.audio.value,
-            cover:    f.cover.value,
-            ownerId:  user.id,
-            isPublic: f.isPublic.checked,
-        });
 
-        alert('Трек добавлен!');
-        location.href = 'profile.html';
+        const audioFile = f.file.files[0];
+        if (!audioFile) return alert('Выберите аудиофайл');
+
+        const formData = new FormData();
+        formData.append('title', f.title.value.trim());
+        formData.append('author', f.artist.value.trim()); // API ждет ключ author
+        formData.append('file', audioFile);
+
+        if (f.cover && f.cover.files[0]) {
+            formData.append('cover', f.cover.files[0]);
+        }
+
+        const submitBtn = f.querySelector('button[type="submit"]');
+        if (submitBtn) submitBtn.disabled = true;
+
+        try {
+            await API.uploadTrack(formData);
+            alert('Трек успешно загружен!');
+            location.href = 'home.html';
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            if (submitBtn) submitBtn.disabled = false;
+        }
     });
 });

@@ -1,10 +1,10 @@
-document.querySelector('.login__form').addEventListener('submit', e => {
+document.querySelector('.login__form').addEventListener('submit', async e => {
     e.preventDefault();
-    const email    = e.target.email.value.trim();
+    const login    = (e.target.login || e.target.email).value.trim();
     const password = e.target.password.value;
 
     try {
-        Auth.login({ email, password });
+        await API.login(login, password);
         location.href = 'home.html';
     } catch (err) {
         alert(err.message);

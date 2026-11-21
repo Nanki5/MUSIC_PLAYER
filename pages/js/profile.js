@@ -1,18 +1,18 @@
-document.addEventListener('DOMContentLoaded', () => {
-    Auth.requireAuth('login.html');
-    const user = DB.getCurrentUser();
-    renderMyTracks(user);
-
-    document.getElementById('totalCount').textContent = DB.getTracksByUser(user.id).length;
-    document.getElementById('favoriteCount').textContent =
-        DB.getTracksByUser(user.id).filter(t => t.isPublic).length;
+document.addEventListener('DOMContentLoaded', async () => {
+    const user = await API.requireAuth('login.html');
+    if (!user) return;
+    await renderMyTracks();
 });
 
-function renderMyTracks(user) {
-    const tracks = DB.getTracksByUser(user.id);
+async function renderMyTracks() {
+    const tracks = await API.getLikedTracks();
     const list = document.querySelector('.track__list');
+
+    document.getElementById('totalCount').textContent = tracks.length;
+    document.getElementById('favoriteCount').textContent = tracks.length;
+
     if (!tracks.length) {
-        list.innerHTML = '<p style="color: var(--color-text-muted)">У вас пока нет треков. <a href="add_track.html">Добавить</a></p>';
+        list.innerHTML = '<p style="color: var(--color-text-muted)">У вас пока нет лайкнутых треков.</p>';
         return;
     }
 
@@ -21,35 +21,25 @@ function renderMyTracks(user) {
             <img src="${t.cover}" alt="" class="track__row-cover">
             <div class="track__row-info">
                 <h3 class="track__row-title">${t.title}</h3>
-                <p class="track__row-artist">${t.artist} · ${t.genre}</p>
+                <p class="track__row-artist">${t.artist}</p>
             </div>
-            <button class="botton__publish ${t.isPublic ? 'botton__publish--active' : ''}" title="${t.isPublic ? 'Снять с публикации' : 'Опубликовать'}">
-                <i class="${t.isPublic ? 'ri-eye-fill' : 'ri-eye-off-line'}"></i>
-            </button>
             <button class="botton__play" data-play="${i}"><i class="ri-play-fill"></i></button>
-            <button class="botton__delete"><i class="ri-delete-bin-line"></i></button>
+            <button class="botton__delete" title="Убрать из лайков"><i class="ri-heart-fill"></i></button>
         </article>
     `).join('');
 
-    list.addEventListener('click', e => {
+    list.onclick = async e => {
         const row = e.target.closest('.track__row');
         if (!row) return;
         const id = row.dataset.id;
 
         if (e.target.closest('.botton__delete')) {
-            if (confirm('Удалить трек?')) {
-                DB.deleteTrack(id);
-                renderMyTracks(user);
-            }
-        }
-        if (e.target.closest('.botton__publish')) {
-            const t = DB.getTracks().find(x => x.id === id);
-            DB.updateTrack(id, { isPublic: !t.isPublic });
-            renderMyTracks(user);
+            await API.toggleLike(id);
+            renderMyTracks();
         }
         if (e.target.closest('[data-play]')) {
-            const i = parseInt(e.target.closest('[data-play]').dataset.play);
+            const i = parseInt(e.target.closest('[data-play]').dataset.play, 10);
             Player.play(tracks, i);
         }
-    });
+    };
 }

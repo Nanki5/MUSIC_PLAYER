@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {// выбранная страница
+document.addEventListener('DOMContentLoaded', async () => {
+    // 1. Подсветка активной страницы в меню
     const path = window.location.pathname;
     document.querySelectorAll('.nav__link').forEach(link => {
         const href = link.getAttribute('href');
@@ -8,10 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {// выбранная ст�
             link.classList.remove('nav__link--active');
         }
     });
-    const authGroup = document.getElementById('authGroup');
-    if (!authGroup) return; //если нет хедера
 
-    const user = DB.getCurrentUser();
+    // 2. Проверка авторизации в шапке
+    const authGroup = document.getElementById('authGroup');
+    if (!authGroup) return;
+
+    const user = await API.getCurrentUser();
     if (user) {
         authGroup.innerHTML = `
             <a href="profile.html" class="button__login button__login--icon" title="${user.name}">
@@ -21,17 +24,19 @@ document.addEventListener('DOMContentLoaded', () => {// выбранная ст�
                 <i class="ri-logout-box-r-line"></i>
             </button>
         `;
-        document.getElementById('logoutBtn').onclick = () => {
-    if (confirm('Вы уверены, что хотите выйти?')) {
-        Auth.logout();
-    }
-};
+        document.getElementById('logoutBtn').onclick = async () => {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                await API.logout();
+            }
+        };
     } else {
         authGroup.innerHTML = `
             <a href="login.html" class="button__login button__login--text">Sign in</a>
         `;
     }
 });
+
+// 3. Кнопка поиска
 const searchButton = document.getElementById('navSearchButton');
 if (searchButton) {
     searchButton.addEventListener('click', () => {

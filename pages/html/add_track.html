@@ -55,13 +55,11 @@
                             <option>Классика</option>
                         </select>
                     </label>
-                    <label class="track__label">Аудио (путь к файлу):
-                        <select name="audio" class="track__select" id="audioSelect" required>
-                        </select>
+                    <label class="track__label">Аудиофайл (mp3, flac, ogg, m4a):
+                        <input type="file" name="file" class="track__input" id="audioInput" accept=".mp3,.flac,.ogg,.m4a,audio/*" required>
                     </label>
-                    <label class="track__label">Обложка:
-                        <select name="cover" class="track__select" id="coverSelect" required>
-                        </select>
+                    <label class="track__label">Обложка (необязательно):
+                        <input type="file" name="cover" class="track__input" id="coverInput" accept=".jpg,.jpeg,.png,.webp,image/*">
                     </label>
                     <label class="track__label">
                         <input type="checkbox" name="isPublic">
@@ -108,12 +106,10 @@
             <p class="site-footer__copy">© 2026 UNIMusic.</p>
         </footer>
     </div>
-    <script src="../js/add_track.js"></script>
+    <script type="module" src="../../core/api.js"></script>
+    <script type="module" src="../js/add_track.js"></script>
     <script src="../../core/main.js"></script>
-    <script src="../js/storage.js"></script>
-    <script src="../js/auth.js"></script>
     <script src="../js/player.js"></script>
     <script src="../js/nav.js"></script>
-    <script src="../js/add_track.js"></script> 
 </body>
 </html>
