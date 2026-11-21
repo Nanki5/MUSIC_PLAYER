@@ -8,7 +8,9 @@ info:
 
     ## Authentication
     Authentication is a stateless HS256 JWT stored in the persistent `auth` cookie
-    (`HttpOnly`, `SameSite=None`, `Max-Age` 30 days, `Secure` outside localhost).
+    (`HttpOnly`, `SameSite=None`, `Secure`, `Max-Age` 30 days). `Secure` is always
+    set because `SameSite=None` requires it; browsers allow `Secure` cookies over
+    `http://localhost` in development, while production requires HTTPS.
     Register and login set the cookie; logout and account deletion clear it.
     Protected endpoints verify on every request that the user still exists.
 
@@ -944,15 +946,15 @@ components:
     AuthCookie:
       description: |
         Sets the `auth` cookie to a signed JWT: `Max-Age=2592000; Path=/;
-        HttpOnly; SameSite=None` plus `Secure` when not on localhost.
+        HttpOnly; SameSite=None; Secure`.
       schema:
         type: string
-        example: auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; Max-Age=2592000; Path=/; HttpOnly; SameSite=None
+        example: auth=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...; Max-Age=2592000; Path=/; HttpOnly; SameSite=None; Secure
     ClearedAuthCookie:
       description: Clears the `auth` cookie (`auth=; Max-Age=0`).
       schema:
         type: string
-        example: auth=; Max-Age=0; Path=/; HttpOnly; SameSite=None
+        example: auth=; Max-Age=0; Path=/; HttpOnly; SameSite=None; Secure
     NoSniff:
       description: Prevents MIME sniffing of media responses.
       schema:

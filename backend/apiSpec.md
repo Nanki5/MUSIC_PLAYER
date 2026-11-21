@@ -2,7 +2,8 @@ API Specification
 
 Style: REST/JSON under /api, errors as {"error": "..."}
 Auth: stateless JWT (payload {user_id}, HS256, no expiry) in persistent cookie (Max-Age 30 days),
-      HttpOnly, SameSite=None; Secure (Secure accepted over http://localhost in dev; prod needs HTTPS);
+      HttpOnly, SameSite=None; Secure always (required by SameSite=None; browsers accept Secure
+      cookies over http://localhost in dev, prod needs HTTPS);
       every protected request verifies the user still exists
 CSRF: state-changing requests (POST/PATCH/DELETE) must carry Origin or Referer matching
       ALLOWED_ORIGINS, else 403 (required because SameSite=None sends the cookie cross-site)

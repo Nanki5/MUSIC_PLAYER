@@ -42,22 +42,12 @@ class Auth
 
     private static function setCookie(string $value, int $maxAge): void
     {
-        $secure = self::isSecureRequest() ? '; Secure' : '';
         header(
             'Set-Cookie: auth=' . $value
             . '; Max-Age=' . $maxAge
-            . '; Path=/; HttpOnly; SameSite=None' . $secure,
+            . '; Path=/; HttpOnly; SameSite=None; Secure',
             false
         );
-    }
-
-    private static function isSecureRequest(): bool
-    {
-        $https = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
-        $host = strtolower($_SERVER['HTTP_HOST'] ?? '');
-        $host = preg_replace('/:\d+$/', '', $host);
-        $local = in_array($host, ['localhost', '127.0.0.1'], true);
-        return $https || !$local;
     }
 
     private static function sign(int $userId): string
