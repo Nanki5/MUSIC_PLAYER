@@ -70,7 +70,9 @@ paths:
       summary: Create an account
       description: |
         Creates a user, signs them in and sets the `auth` cookie.
-        `login` must match `^[a-zA-Z0-9_.]{3,50}$`; `password` must be 8-72 bytes.
+        `login` is 3-50 characters of letters, digits, `_` or `.`, with an optional
+        single `@` for email-style logins (e.g. `alice@example.com`). It is
+        case-sensitive and not normalized. `password` must be 8-72 bytes.
       security: []
       parameters:
         - $ref: '#/components/parameters/Origin'
@@ -1021,8 +1023,12 @@ components:
       properties:
         login:
           type: string
-          pattern: '^[a-zA-Z0-9_.]{3,50}$'
-          description: 3-50 characters; letters, digits, underscore or dot.
+          pattern: '^[a-zA-Z0-9_.]+(?:@[a-zA-Z0-9_.]+)?$'
+          minLength: 3
+          maxLength: 50
+          description: |
+            3-50 characters; letters, digits, underscore or dot, with an optional
+            single @ for email-style logins (e.g. alice@example.com). Case-sensitive.
           example: alice
         password:
           type: string

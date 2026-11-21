@@ -19,7 +19,7 @@ FR-17 An authenticated user can change their playlist picture
 NFR-1 Passwords are stored hashed (bcrypt via password_hash)
 NFR-2 Audio uploads: mp3/flac/ogg/m4a, max 50 MB; cover and playlist picture uploads: jpg/png/webp, max 5 MB. Acceptance: extension must be in the whitelist and finfo must not contradict it (known finfo aliases for m4a/ogg accepted); stored Content-Type comes from a fixed extension-to-MIME map; /media responses carry X-Content-Type-Options: nosniff
 NFR-3 Text length caps: login 50, song title and author 100, playlist name 100
-NFR-4 Login format ^[a-zA-Z0-9_.]{3,50}$; password 8-72 characters
+NFR-4 Login format ^[a-zA-Z0-9_.]+(?:@[a-zA-Z0-9_.]+)?$ with length 3-50 (optional single @ for email-style logins); password 8-72 characters
 NFR-5 Auth cookie is persistent (Max-Age 30 days), HttpOnly, SameSite=None; Secure (Secure cookies are accepted over http://localhost in dev; prod requires HTTPS)
 NFR-6 Every state-changing request (POST/PATCH/DELETE) must carry an Origin or Referer header matching the ALLOWED_ORIGINS allowlist, else 403 (CSRF defense required by SameSite=None)
 

@@ -34,6 +34,8 @@ Status:   401 auth failure, 403 CSRF/origin rejection, 404 missing (incl. privat
 
 AUTH
 POST   /api/auth/register   {login, password}   -> 201 {login}, sets cookie   | 409 taken, 422 invalid
+        login: 3-50 chars of [a-zA-Z0-9_.] with optional single @ (e.g. alice@example.com);
+        case-sensitive, no lowercasing/normalization; login endpoint matches it exactly
 POST   /api/auth/login      {login, password}   -> 200 {login}, sets cookie   | 401 generic
 POST   /api/auth/logout                         -> 204, clears cookie
 DELETE /api/auth/account    (cookie)            -> 204: DB cascade purge, MinIO cleanup, cookie cleared
