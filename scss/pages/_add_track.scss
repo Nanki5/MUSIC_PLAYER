@@ -1,0 +1,15 @@
+@use '../base/variables' as *;
+
+.add__hero { margin-bottom: 32px; }
+
+.add__hero-title {
+    font-size: $font-size-large;
+    font-weight: 800;
+    color: $color-text-light;
+    margin-bottom: 8px;
+}
+
+.add__hero-subtitle {
+    color: $color-text-muted;
+    font-size: $font-size-base;
+}

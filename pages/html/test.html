@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>API test</title>
+  <style>
+    body { font-family: sans-serif; max-width: 900px; margin: 20px auto; }
+    button { margin: 4px; padding: 6px 12px; cursor: pointer; }
+    pre { background: #f4f4f4; padding: 12px; overflow: auto; max-height: 500px; }
+    .ok { color: green; }
+    .err { color: red; }
+    input { padding: 4px; margin: 2px; }
+  </style>
+</head>
+<body>
+  <h1>Проверка связи фронт ↔ бек</h1>
+  <p>API: <code>http://localhost:8000</code></p>
+
+  <h2>Auth</h2>
+  <input id="login" placeholder="login" value="testuser">
+  <input id="password" type="password" placeholder="password" value="testpass123">
+  <button data-act="register">Register</button>
+  <button data-act="login">Login</button>
+  <button data-act="logout">Logout</button>
+  <button data-act="me">GET /api/me</button>
+
+  <h2>Songs</h2>
+  <button data-act="songs">GET /api/songs</button>
+
+  <h2>Likes</h2>
+  <input id="songId" placeholder="song id" value="1" style="width:70px">
+  <button data-act="like">Toggle like</button>
+  <button data-act="myLikes">GET /api/me/likes</button>
+
+  <h2>Результат</h2>
+  <pre id="out">Нажми любую кнопку...</pre>
+
+  <script type="module">
+    import { auth, songs, likes } from '../core/api.js';
+
+    const out = document.getElementById('out');
+
+    function show(label, data) {
+      out.className = 'ok';
+      out.textContent = `[${label}]\n` + JSON.stringify(data, null, 2);
+    }
+    function showError(label, e) {
+      out.className = 'err';
+      out.textContent = `[${label}] ERROR (status=${e.status ?? '?'}): ${e.message}`;
+    }
+
+    document.body.addEventListener('click', async (ev) => {
+      const act = ev.target.dataset.act;
+      if (!act) return;
+
+      const login = document.getElementById('login').value;
+      const password = document.getElementById('password').value;
+      const songId = document.getElementById('songId').value;
+
+      try {
+        let result;
+        switch (act) {
+          case 'register': result = await auth.register(login, password); break;
+          case 'login':    result = await auth.login(login, password);    break;
+          case 'logout':   result = await auth.logout();                  break;
+          case 'me':       result = await auth.me();                      break;
+          case 'songs':    result = await songs.list({ limit: 10 });      break;
+          case 'like':     result = await likes.toggle(songId);           break;
+          case 'myLikes':  result = await likes.myLikes();                break;
+          default: return;
+        }
+        show(act, result ?? '(пустой ответ 204)');
+      } catch (e) {
+        showError(act, e);
+      }
+    });
+  </script>
+</body>
+</html>

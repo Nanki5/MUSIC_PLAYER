@@ -1,0 +1,25 @@
+// main.scss
+@use 'base/reset';
+@use 'base/typography';
+
+@use 'components/mixins';
+@use 'components/forms';
+@use 'components/buttons'; 
+@use 'components/nav';
+@use 'components/track-list';
+@use 'components/cards';
+
+@use 'layout/header';
+@use 'layout/footer';
+@use 'layout/sidebar';
+@use 'layout/player';
+
+@use 'pages/about';
+@use 'pages/home';
+@use 'pages/login';
+@use 'pages/register';
+@use 'pages/add_track';
+@use 'pages/profile';
+
+// @use 'themes/dark';  
+// @use 'themes/light'; 

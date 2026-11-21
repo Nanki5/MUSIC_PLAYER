@@ -1,0 +1,75 @@
+@use '../base/variables' as *;
+
+.album-row {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scroll-behavior: smooth;
+
+    &::-webkit-scrollbar { height: 8px; }
+    &::-webkit-scrollbar-thumb { background: $color-bg-hover; border-radius: $r-full; }
+}
+
+.album-card,
+.track__card {
+    flex: 0 0 180px;
+    width: 180px;
+    padding: 12px;
+    background: transparent;
+    border-radius: $r-lg;
+    transition: background .2s;
+
+    &:hover { background: $color-bg-elevated; }
+}
+
+.album-card__cover,
+.track__card-cover {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: $r-md;
+    background: $color-bg-alt;
+    object-fit: cover;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .4);
+}
+
+.album-card__title,
+.track__card-title {
+    font-size: $font-size-small;
+    font-weight: 600;
+    color: $color-text;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.album-card__subtitle,
+.track__card-artist {
+    font-size: $font-size-xs;
+    color: $color-text-muted;
+}
+
+.track__card-artist { margin-bottom: 10px; }
+
+.track__card-actions { display: flex; gap: 6px; }
+
+.genre__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 16px;
+}
+
+.genre__card {
+    padding: 16px;
+    background: $color-container;
+    border: 1px solid $color-border;
+    border-radius: $r-lg;
+    text-align: center;
+    font-weight: 700;
+    color: $color-text;
+    cursor: pointer;
+    transition: background .2s, color .2s;
+
+    &:hover { background: $color-primary; color: $color-text-light; }
+}

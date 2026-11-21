@@ -1,0 +1,141 @@
+@use '../base/variables' as *;
+@use '../components/forms' as *;
+
+.register__page {
+    @include auth-page;
+}
+
+.registration {
+    width: 100%;
+    display: grid;
+}
+
+.registration__content {
+    @include auth-box;
+
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 24px;
+
+    @media (min-width: $wide) {
+        max-width: 900px;
+        grid-template-columns: 1fr 360px;
+        align-items: center;
+        padding: 32px;
+        gap: 40px;
+    }
+}
+
+.registration__title {
+    font-size: $font-size-xl;
+    color: $color-text-light;
+    text-align: center;
+    margin-bottom: 36px;
+    font-weight: 800;
+}
+
+.registration__group {
+    display: grid;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.registration__box {
+    @include auth-field;
+}
+
+.registration__icon {
+    position: absolute;
+    left: 18px;
+    font-size: 18px;
+    color: $color-text-muted;
+}
+
+.registration__label {
+    position: absolute;
+    left: 48px;
+    color: $color-text-muted;
+    transition: opacity .2s, transform .2s;
+    pointer-events: none;
+}
+
+.registration__input {
+    width: 100%;
+    height: 100%;
+    padding: 0 18px 0 48px;
+    background: transparent;
+    color: $color-text;
+    z-index: 2;
+    border-radius: inherit;
+    font-size: $font-size-base;
+
+    &::placeholder { color: transparent; }
+
+    &:focus + .registration__label,
+    &:not(:placeholder-shown) + .registration__label {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    &:autofill {
+        transition: background-color 6000s, color 6000s;
+    }
+}
+
+.registration__ihaveaccount {
+    display: block;
+    width: max-content;
+    margin: 0 0 28px auto;
+    color: $color-primary;
+    font-size: $font-size-sm;
+    font-weight: 600;
+
+    &:hover { text-decoration: underline; }
+}
+
+.registration__button {
+    width: 100%;
+    height: 52px;
+    background: $color-primary;
+    color: $color-text-light;
+    border-radius: $r-full;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+    font-size: $font-size-base;
+    transition: background .2s, transform .1s;
+
+    &:hover  { background: $color-primary-hover; }
+    &:active { transform: scale(.98); }
+
+    i { font-size: 1.25rem; }
+}
+
+.registration__sign {
+    text-align: center;
+    font-size: $font-size-sm;
+    color: $color-text-muted;
+
+    a { color: $color-primary; font-weight: 600; }
+}
+
+.registration__image {
+    display: none;
+
+    @media (min-width: $wide) {
+        display: block;
+        overflow: hidden;
+        border-radius: $r-lg;
+    }
+}
+
+.registration__img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: $r-lg;
+    object-fit: cover;
+}
