@@ -3,36 +3,55 @@
 @use '../components/mixins' as *;
 
 .login__page {
-    @include auth-page;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background: $color-bg;
+    color: $color-text;
+    padding: 24px;
 }
 
 .login {
     width: 100%;
-    display: grid;
+    display:flex;
+    justify-content: center;
+    padding-top: 5rem;
+    
 }
 
 .login__content {
-    @include auth-box;
+    min-height: 70vh;
+    min-width: 60vh;
+    place-items: center;
+    border-radius: 3rem;
+    background: $color-container;
+    color: $color-text;
+    box-shadow: $shadow-sm;
 
     display: grid;
     grid-template-columns: 1fr;
     gap: 24px;
 
     @media (min-width: $wide) {
-        max-width: 900px;
+        min-width: 120vh;
+        max-height: 110vh;
         grid-template-columns: 1fr 360px;
         align-items: center;
-        padding: 32px;
+        padding: 50px;
         gap: 40px;
     }
 }
 
+.login__form{
+    display: flex;
+    flex-direction: column;
+}
 .login__title {
-    font-size: $font-size-xl;
+    font-size: $font-size-2xl;
     color: $color-text-light;
     text-align: center;
-    margin-bottom: 36px;
-    font-weight: 800;
+    margin-bottom: 50px;
+    font-weight: 750;
 }
 
 .login__group {
@@ -42,7 +61,17 @@
 }
 
 .login__box {
-    @include auth-field;
+    position: relative;
+    height: 60px;
+    width: 350px;
+    background: $color-bg-alt;
+    border: 1px solid $color-border;
+    border-radius: $r-full;
+    display: flex;
+    align-items: center;
+    transition: border-color .2s;
+
+    &:focus-within { border-color: $color-primary; }
 }
 
 .login__icon {
@@ -87,7 +116,7 @@
     display: block;
     width: max-content;
     margin: 0 0 28px auto;
-    color: $color-primary;
+    color: $color-primary-hover;
     font-size: $font-size-sm;
     font-weight: 600;
 
@@ -95,30 +124,33 @@
 }
 
 .login__button {
-    width: 100%;
+    align-self: center;
+    justify-content: center;
+    width: 70%;
     height: 52px;
-    background: $color-primary;
+    background: linear-gradient(270deg, $color-primary, $color-primary-alt);
     color: $color-text-light;
+    border: 0;
     border-radius: $r-full;
     font-weight: 700;
-    display: flex;
     align-items: center;
-    justify-content: center;
     gap: 8px;
     margin-bottom: 16px;
     font-size: $font-size-base;
     transition: background .2s, transform .1s;
 
-    &:hover  { background: $color-primary-hover; }
+    &:hover  { background:$color-primary-alt; }
     &:active { transform: scale(.98); }
 }
 
 .login__sign {
     text-align: center;
     font-size: $font-size-sm;
-    color: $color-text-muted;
-
-    a { color: $color-primary; font-weight: 600; }
+    color: $color-accent;
+}
+.login_sign-up { 
+    color: $color-primary-hover; 
+    font-weight: 600; 
 }
 
 .login__image {
@@ -127,7 +159,7 @@
     @media (min-width: $wide) {
         display: block;
         overflow: hidden;
-        border-radius: $r-lg;
+        border-radius: 2rem;
     }
 }
 

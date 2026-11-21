@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const user = await API.getCurrentUser();
             const playlists = user ? await API.getMyPlaylists() : [];
 
+
             if (playlists.length) {
                 albumRow.innerHTML = playlists.map(pl => `
                     <article class="album-card" data-id="${pl.id}">
@@ -119,6 +120,7 @@ async function openPlaylist(id) {
     }
 
     const tracks = playList.tracks;
+
     if (!tracks.length) return alert('Плейлист пуст');
 
     const modal = document.createElement('div');
@@ -157,22 +159,14 @@ async function openPlaylist(id) {
                         <button class="mini-player__btn mini-player__btn--play" id="miniPlay" type="button"><i class="ri-play-fill"></i></button>
                         <button class="mini-player__btn" id="miniNext" type="button"><i class="ri-skip-forward-fill"></i></button>
                     </div>
-                    <audio id="miniAudio"></audio>
                 </div>
             </div>
         </div>
     `;
-
     document.body.appendChild(modal);
 
     let currentIndex = 0;
-    const audio   = modal.querySelector('#miniAudio');
-    const img     = modal.querySelector('#miniImg');
-    const title   = modal.querySelector('#miniTitle');
-    const artist  = modal.querySelector('#miniArtist');
-    const playBtn = modal.querySelector('#miniPlay');
-
-    function loadMini(index) {
+    function playTrack(index) {
         currentIndex = index;
         const t = tracks[index];
         img.src            = t.cover;
@@ -199,8 +193,8 @@ async function openPlaylist(id) {
 
     audio.onended = () => { loadMini((currentIndex + 1) % tracks.length); audio.play(); setPlayingUI(true); };
 
+
     function close() {
-        audio.pause();
         modal.remove();
         document.removeEventListener('keydown', onEsc);
     }
@@ -211,3 +205,4 @@ async function openPlaylist(id) {
 
     loadMini(0);
 }
+

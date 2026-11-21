@@ -16,21 +16,24 @@
             <img src="../../assets/images/unicorn.svg" alt="Логотип">
             <span class="site__header-brand">UNIMusic</span>
         </a>
-        <form class="search__form" onsubmit="">
-            <input type="search" placeholder="Search..." class="search__form-input">
-            <button type="submit" class="ri-search-line search__form-icon-button"></button>
-        </form>
+        <div class="search">
+            <form class="search__form" id="searchForm" onsubmit="return false;">
+                <input type="search" placeholder="Search..." class="search__form-input" id="searchInput" autocomplete="off">
+                <button type="submit" class="ri-search-line search__form-icon-button"></button>
+            </form>
+            <div class="search__results" id="searchResults" hidden></div>
+        </div>
         <div class="header__auth-group" id="authGroup">
             <a href="login.html" class="button__login">Sign in</a>
         </div>
     </header>
     <nav class="main__nav">
         <ul class="main-nav__list">
-           <li><button class="nav__search-button" id="navSearchButton" aria-label="Поиск"> <i class="ri-search-line"></i></button></li>
-            <li><a href="home.html" class="nav__link"><i class="ri-home-2-line"></i></a></li> <!--<img src="..\..\assets\icons\home-2-line.svg" alt="Домой">-->
-            <li><a href="profile.html" class="nav__link"><i class="ri-user-heart-line"></i></a></li>
-            <li><a href="add_track.html" class="nav__link"><i class="ri-file-music-fill"></i></a></li>
-            <li><a href="about.html" class="nav__link"><i class="ri-information-2-line"></i></a></li>
+            <li><button class="nav__search-button" id="navSearchButton" data-tooltip="Поиск" aria-label="Поиск"> <i class="ri-search-line"></i></button></li>
+            <li><a href="home.html" class="nav__link" data-tooltip="Главная"><i class="ri-home-2-line"></i></a></li> <!--<img src="..\..\assets\icons\home-2-line.svg" alt="Домой">-->
+            <li><a href="profile.html" class="nav__link" data-tooltip="Моя музыка"><i class="ri-user-heart-line"></i></a></li>
+            <li><a href="add_track.html" class="nav__link" data-tooltip="Добавить трек"><i class="ri-file-music-fill"></i></a></li>
+            <li><a href="about.html" class="nav__link" data-tooltip="О сервисе"><i class="ri-information-2-line"></i></a></li>
         </ul>
     </nav>
     <div class="content">
@@ -61,8 +64,14 @@
             </section>
 
             <section class="section">
-                <div class="track__list">
-                    <!-- сюда костян добавлем сохраненные-->
+                <h2 class="section__title">Избранное</h2>
+                <div class="track__list" id="favoriteList">
+                </div>
+            </section>
+
+            <section class="section">
+                <h2 class="section__title">Мои треки</h2>
+                <div class="track__list" id="myTrackList">
                 </div>
             </section>
         </main>
@@ -72,12 +81,6 @@
                 <li>Всего треков: <strong id="totalCount">3</strong></li>
                 <li>В избранном: <strong id="favoriteCount">2</strong></li>
             </ul>
-
-            <h3 class="sidebar__title">Быстрые действия</h3>
-            <ul class="sidebar__list">
-                <li><a href="add_track.html" class="sidebar__link">+ Добавить трек</a></li>
-                <li><a href="home.html" class="sidebar__link">На главную</a></li>
-            </ul>
         </aside>
         <div class="player" id="player" hidden>
             <img class="player__cover" src="" alt="">
@@ -85,13 +88,15 @@
                 <p class="player__name">—</p>
                 <p class="player__artist">—</p>
             </div>
-            <button class="player__btn" id="player__prev"><i class="ri-skip-back-fill"></i></button>
-            <button class="player__btn player__btn--play" id="player__play"><i class="ri-play-fill"></i></button>
-            <button class="player__btn" id="player__next"><i class="ri-skip-forward-fill"></i></button>
+            <button class="player__button" id="player__prev"><i class="ri-skip-back-fill"></i></button>
+            <button class="player__button player__button--play" id="player__play"><i class="ri-play-fill"></i></button>
+            <button class="player__button" id="player__next"><i class="ri-skip-forward-fill"></i></button>
             <div class="player__progress">
-                <span class="player__time-current">0:00</span>
                 <div class="player__progress-bar" id="player__progress"><div class="player__progress-fill"></div></div>
-                <span class="player__time-final">0:00</span>
+                <div class="player__time">
+                    <span class="player__time-current">0:00</span>
+                    <span class="player__time-final">0:00</span>
+                </div>
             </div>
             <audio id="player__audio"></audio>
         </div>
@@ -102,6 +107,7 @@
     <script type="module" src="../../core/api.js"></script>
     <script src="../js/player.js"></script>
     <script src="../js/nav.js"></script>
-    <script src="../js/profile.js"></script>     
+    <script src="../js/profile.js"></script>   
+    <script src="../js/search.js"></script>  
 </body>
 </html>

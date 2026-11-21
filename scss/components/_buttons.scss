@@ -6,6 +6,7 @@
     width: 40px; height: 40px; padding: 0;
     box-shadow: 0 4px 12px rgba($color-primary, .3);
     opacity: 0;
+    background: linear-gradient(135deg, $color-primary, $color-primary-alt);
     transition: opacity .2s, transform .1s;
     .track__row:hover &,
     .track__card:hover &,

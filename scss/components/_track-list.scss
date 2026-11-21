@@ -3,7 +3,7 @@
 .track__list {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 10px;
 }
 
 .track__row {
@@ -12,10 +12,14 @@
     align-items: center;
     gap: 16px;
     padding: 8px 12px;
+    background-color: $color-bg-alt;
     border-radius: $r-md;
     transition: background .2s;
-
-    &:hover { background: $color-bg-elevated; }
+    box-shadow: 0px 10px 12px rgba(0, 0, 0, 0.1);
+    &:hover { 
+        background: $color-bg-elevated;
+        border-bottom: 3px solid $color-accent;
+     }
 }
 
 .track__row-cover {
