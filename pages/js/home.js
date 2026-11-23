@@ -1,11 +1,21 @@
 document.addEventListener('DOMContentLoaded', async () => {
-    // 1. Загружаем плейлисты пользователя (если авторизован)
+    // 1. Пользователь + id лайкнутых треков.
+    // GET /api/songs не сообщает, лайкнут ли трек текущим пользователем,
+    // поэтому берём это из /api/me/likes.
+    let user = null;
+    let likedIds = new Set();
+    try {
+        user = await API.getCurrentUser();
+        if (user) likedIds = await API.getLikedIds();
+    } catch (err) {
+        console.error('Ошибка загрузки лайков:', err);
+    }
+
+    // 2. Загружаем плейлисты пользователя (если авторизован)
     const albumRow = document.querySelector('.album-row');
     if (albumRow) {
         try {
-            const user = await API.getCurrentUser();
             const playlists = user ? await API.getMyPlaylists() : [];
-
 
             if (playlists.length) {
                 albumRow.innerHTML = playlists.map(pl => `
@@ -27,7 +37,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 
-    // 2. Загружаем «Популярное» (по лайкам) и «Все треки» (новые сверху)
+    // 3. Загружаем «Популярное» (по лайкам) и «Все треки» (новые сверху)
     let popular = [];
     let all = [];
     try {
@@ -49,14 +59,12 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <p class="track__card-artist">${t.artist}</p>
                 <div class="track__card-actions">
                     <button class="botton__play" data-play="${i}"><i class="ri-play-fill"></i></button>
-                    <button class="botton__favorite" data-like="${t.id}" title="Лайк (${t.likeCount})">
-                        <i class="ri-heart-line"></i>
-                    </button>
+                    ${likeButtonHtml(t, likedIds)}
                 </div>
             </article>
         `).join('');
 
-        bindTrackEvents(trackRows[1], popular);
+        bindTrackEvents(trackRows[1], popular, likedIds);
     }
 
     // Рендер списка «Все треки»
@@ -69,20 +77,46 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h3 class="track__row-title">${t.title}</h3>
                     <p class="track__row-artist">${t.artist}</p>
                 </div>
-                <span class="track__row-duration">♥ ${t.likeCount}</span>
+                <span class="track__row-duration" data-like-count="${t.id}" data-count="${t.likeCount}">♥ ${t.likeCount}</span>
                 <div class="track__row-actions">
                     <button class="botton__play" data-play="${i}"><i class="ri-play-fill"></i></button>
-                    <button class="botton__favorite" data-like="${t.id}"><i class="ri-heart-line"></i></button>
+                    ${likeButtonHtml(t, likedIds)}
                 </div>
             </article>
         `).join('');
 
-        bindTrackEvents(allTracksEl, all);
+        bindTrackEvents(allTracksEl, all, likedIds);
     }
 });
 
+// Кнопка лайка с учётом того, лайкнут ли трек пользователем
+function likeButtonHtml(track, likedIds) {
+    const liked = likedIds.has(String(track.id));
+    return `<button class="botton__favorite${liked ? ' botton__favorite--active' : ''}"
+                    data-like="${track.id}" title="Лайк (${track.likeCount})">
+                <i class="${liked ? 'ri-heart-fill' : 'ri-heart-line'}"></i>
+            </button>`;
+}
+
+// Обновляем все сердечки и счётчики одного трека на странице
+function updateLikeUI(songId, liked) {
+    const id = String(songId);
+
+    document.querySelectorAll(`[data-like="${id}"]`).forEach(btn => {
+        btn.classList.toggle('botton__favorite--active', liked);
+        const icon = btn.querySelector('i');
+        if (icon) icon.className = liked ? 'ri-heart-fill' : 'ri-heart-line';
+    });
+
+    document.querySelectorAll(`[data-like-count="${id}"]`).forEach(el => {
+        const count = Math.max(0, Number(el.dataset.count || 0) + (liked ? 1 : -1));
+        el.dataset.count = String(count);
+        el.textContent = `♥ ${count}`;
+    });
+}
+
 // Единый обработчик для кнопок Play и Like
-function bindTrackEvents(container, tracksList) {
+function bindTrackEvents(container, tracksList, likedIds) {
     container.addEventListener('click', async e => {
         const playBtn = e.target.closest('[data-play]');
         if (playBtn) {
@@ -96,8 +130,12 @@ function bindTrackEvents(container, tracksList) {
             const songId = likeBtn.dataset.like;
             try {
                 const res = await API.toggleLike(songId);
-                const icon = likeBtn.querySelector('i');
-                icon.className = res.liked ? 'ri-heart-fill' : 'ri-heart-line';
+                const liked = !!res.liked;
+
+                if (liked) likedIds.add(String(songId));
+                else likedIds.delete(String(songId));
+
+                updateLikeUI(songId, liked);
             } catch (err) {
                 if (err.status === 401) {
                     alert('Войдите в аккаунт, чтобы ставить лайки');
@@ -165,8 +203,14 @@ async function openPlaylist(id) {
     `;
     document.body.appendChild(modal);
 
+    const img     = modal.querySelector('#miniImg');
+    const title   = modal.querySelector('#miniTitle');
+    const artist  = modal.querySelector('#miniArtist');
+    const audio   = document.getElementById('player__audio');
+    const playBtn = modal.querySelector('#miniPlay');
+
     let currentIndex = 0;
-    function playTrack(index) {
+    function loadMini(index) {
         currentIndex = index;
         const t = tracks[index];
         img.src            = t.cover;
@@ -205,4 +249,3 @@ async function openPlaylist(id) {
 
     loadMini(0);
 }
-

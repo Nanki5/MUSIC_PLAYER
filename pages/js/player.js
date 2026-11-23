@@ -34,15 +34,15 @@ const Player = {
         });
 
         this.audio.addEventListener('timeupdate', () => {
-            if (!this.audio.duration) return;
+            if (!Number.isFinite(this.audio.duration) || this.audio.duration <= 0) return;
             this.fill.style.width = (this.audio.currentTime / this.audio.duration * 100) + '%';
             this.timeCur.textContent = this._fmt(this.audio.currentTime);
+            this.timeFin.textContent = this._fmt(this.audio.duration);
         });
 
-        this.audio.addEventListener('loadedmetadata', () => {
-            if (!this.audio.duration || isNaN(this.audio.duration)) return;
-            this.tFin.textContent = this._fmt(this.audio.duration);
-        });
+        // Длительность известна только после загрузки метаданных аудиофайла
+        this.audio.addEventListener('loadedmetadata', () => this._updateDuration());
+        this.audio.addEventListener('durationchange', () => this._updateDuration());
 
         this.audio.addEventListener('ended', () => {
             if (this.queue.length <= 1) {
@@ -120,9 +120,17 @@ const Player = {
     },
 
     _fmt(sec) {
+        if (!Number.isFinite(sec) || sec < 0) return '0:00';
         const m = Math.floor(sec / 60);
         const s = String(Math.floor(sec % 60)).padStart(2, '0');
         return `${m}:${s}`;
+    },
+
+    _updateDuration() {
+        const duration = this.audio.duration;
+        this.timeFin.textContent = Number.isFinite(duration) && duration > 0
+            ? this._fmt(duration)
+            : '0:00';
     },
 
     play(tracks, startIndex = 0) {
@@ -143,6 +151,11 @@ const Player = {
         this.artist.textContent = t.artist;
         this.cover.src = t.cover || '../../assets/images/images.png';
         this.audio.src = t.audio;
+
+        // Сбрасываем таймеры, пока не загрузились метаданные нового трека
+        this.fill.style.width = '0%';
+        this.timeCur.textContent = '0:00';
+        this.timeFin.textContent = '0:00';
     },
 
     toggle() {

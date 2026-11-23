@@ -9,6 +9,7 @@ function mapSong(s) {
     cover: s.cover_url,
     likeCount: s.like_count ?? 0,
     likedAt: s.liked_at || null,
+    liked: s.liked ?? Boolean(s.liked_at),
   };
 }
 
@@ -101,6 +102,20 @@ export const API = {
     const params = new URLSearchParams({ limit, offset });
     const list = await request(`/api/me/likes?${params}`);
     return list.map(mapSong);
+  },
+
+  // GET /api/songs не отдаёт признак "лайкнут ли трек текущим пользователем",
+  // поэтому собираем id лайкнутых треков из /api/me/likes постранично.
+  async getLikedIds(chunkSize = 100) {
+    const ids = new Set();
+    let offset = 0;
+    for (;;) {
+      const page = await this.getLikedTracks(chunkSize, offset);
+      page.forEach(t => ids.add(String(t.id)));
+      if (page.length < chunkSize) break;
+      offset += chunkSize;
+    }
+    return ids;
   },
 
   async toggleLike(songId) {
