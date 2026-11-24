@@ -1,0 +1,137 @@
+{
+  "attribution": {
+    "audio": "SoundHelix example songs by T. Schürger - https://www.soundhelix.com/audio-examples (free to use with credit)",
+    "covers": "Gradient images generated for this demo"
+  },
+  "users": [
+    { "login": "alice", "password": "password123" },
+    { "login": "bob", "password": "password123" }
+  ],
+  "songs": [
+    {
+      "title": "SoundHelix Song 1",
+      "author": "T. Schürger",
+      "uploader": "alice",
+      "music": "music/soundhelix-01.mp3",
+      "cover": "covers/cover-01.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+    },
+    {
+      "title": "SoundHelix Song 2",
+      "author": "T. Schürger",
+      "uploader": "alice",
+      "music": "music/soundhelix-02.mp3",
+      "cover": "covers/cover-02.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+    },
+    {
+      "title": "SoundHelix Song 3",
+      "author": "T. Schürger",
+      "uploader": "bob",
+      "music": "music/soundhelix-03.mp3",
+      "cover": "covers/cover-03.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+    },
+    {
+      "title": "SoundHelix Song 4",
+      "author": "T. Schürger",
+      "uploader": "bob",
+      "music": "music/soundhelix-04.mp3",
+      "cover": "covers/cover-04.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+    },
+    {
+      "title": "SoundHelix Song 5",
+      "author": "T. Schürger",
+      "uploader": "alice",
+      "music": "music/soundhelix-05.mp3",
+      "cover": "covers/cover-05.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3"
+    },
+    {
+      "title": "SoundHelix Song 6",
+      "author": "T. Schürger",
+      "uploader": "alice",
+      "music": "music/soundhelix-06.mp3",
+      "cover": "covers/cover-06.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-6.mp3"
+    },
+    {
+      "title": "SoundHelix Song 7",
+      "author": "T. Schürger",
+      "uploader": "bob",
+      "music": "music/soundhelix-07.mp3",
+      "cover": "covers/cover-07.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-7.mp3"
+    },
+    {
+      "title": "SoundHelix Song 8",
+      "author": "T. Schürger - Spy vs. Spy (Chill-out Acid Squeeze Mix)",
+      "uploader": "bob",
+      "music": "music/soundhelix-08.mp3",
+      "cover": "covers/cover-08.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"
+    },
+    {
+      "title": "SoundHelix Song 9",
+      "author": "T. Schürger",
+      "uploader": "alice",
+      "music": "music/soundhelix-09.mp3",
+      "cover": "covers/cover-09.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-9.mp3"
+    },
+    {
+      "title": "SoundHelix Song 10",
+      "author": "T. Schürger",
+      "uploader": "bob",
+      "music": "music/soundhelix-10.mp3",
+      "cover": "covers/cover-10.png",
+      "source": "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-10.mp3"
+    }
+  ],
+  "likes": [
+    { "user": "alice", "song": "SoundHelix Song 3" },
+    { "user": "alice", "song": "SoundHelix Song 5" },
+    { "user": "alice", "song": "SoundHelix Song 8" },
+    { "user": "bob", "song": "SoundHelix Song 1" },
+    { "user": "bob", "song": "SoundHelix Song 4" },
+    { "user": "bob", "song": "SoundHelix Song 10" }
+  ],
+  "playlists": [
+    {
+      "name": "Chill Mix",
+      "owner": "alice",
+      "published": true,
+      "picture": "covers/cover-03.png",
+      "songs": ["SoundHelix Song 1", "SoundHelix Song 2", "SoundHelix Song 4", "SoundHelix Song 6"]
+    },
+    {
+      "name": "Workout",
+      "owner": "bob",
+      "published": true,
+      "picture": null,
+      "songs": ["SoundHelix Song 3", "SoundHelix Song 5", "SoundHelix Song 7"]
+    },
+    {
+      "name": "Road Trip",
+      "owner": "bob",
+      "published": true,
+      "picture": "covers/cover-05.png",
+      "songs": ["SoundHelix Song 2", "SoundHelix Song 7", "SoundHelix Song 10", "SoundHelix Song 4"]
+    },
+    {
+      "name": "Focus Flow",
+      "owner": "alice",
+      "published": true,
+      "picture": null,
+      "songs": ["SoundHelix Song 6", "SoundHelix Song 9", "SoundHelix Song 3"]
+    },
+    {
+      "name": "Late Night Drive",
+      "owner": "alice",
+      "published": true,
+      "picture": "covers/cover-10.png",
+      "songs": ["SoundHelix Song 1", "SoundHelix Song 8", "SoundHelix Song 5", "SoundHelix Song 10"]
+    }
+  ]
+}

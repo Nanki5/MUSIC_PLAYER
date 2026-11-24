@@ -5,12 +5,31 @@ class PlaylistController
     public static function register(Router $router): void
     {
         $router->post('/api/playlists', [self::class, 'create']);
+        $router->get('/api/playlists', [self::class, 'index']);
         $router->get('/api/playlists/{id}', [self::class, 'show']);
         $router->get('/api/me/playlists', [self::class, 'mine']);
         $router->patch('/api/playlists/{id}', [self::class, 'rename']);
         $router->patch('/api/playlists/{id}/picture', [self::class, 'changePicture']);
         $router->delete('/api/playlists/{id}', [self::class, 'destroy']);
         $router->post('/api/playlists/{id}/songs/{songId}', [self::class, 'toggleSong']);
+    }
+
+    public static function index(array $params): void
+    {
+        $pagination = Http::assertValidPagination(10);
+
+        $stmt = Db::pdo()->prepare(
+            'SELECT id, name, published, picture_id FROM playlists'
+            . ' WHERE published = true ORDER BY id DESC LIMIT ? OFFSET ?'
+        );
+        $stmt->execute([$pagination['limit'], $pagination['offset']]);
+
+        $playlists = [];
+        foreach ($stmt->fetchAll() as $row) {
+            $row['published'] = self::publishedFlag($row['published']);
+            $playlists[] = Serializer::playlistMeta($row);
+        }
+        Http::json($playlists);
     }
 
     public static function create(array $params): void

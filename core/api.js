@@ -130,6 +130,13 @@ export const API = {
     return mapSong(song);
   },
 
+  // Публичный каталог: только опубликованные плейлисты.
+  async getPlaylists({ limit = 10, offset = 0 } = {}) {
+    const params = new URLSearchParams({ limit, offset });
+    const list = await request(`/api/playlists?${params}`);
+    return list.map(mapPlaylist);
+  },
+
   async getMyPlaylists() {
     const list = await request('/api/me/playlists');
     return list.map(mapPlaylist);

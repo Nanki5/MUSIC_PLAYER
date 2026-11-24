@@ -28,7 +28,7 @@ Playlist: {id, name, published, picture_url, songs:[Song...]}   (song objects in
 Media URLs: audio_url/cover_url/picture_url are absolute, built at response time as
           PUBLIC_BASE_URL + "/media/..." (e.g. http://localhost:8000/media/cover/42); the DB
           stores no host, only bare ids
-Params:   limit default 20 / max 100, offset >= 0; invalid params -> 422
+Params:   limit default 20 (10 for GET /api/playlists) / max 100, offset default 0; invalid -> 422
 Status:   401 auth failure, 403 CSRF/origin rejection, 404 missing (incl. private playlists),
           409 conflict, 413 too large, 415 wrong media type, 422 validation, 204 no body
 
@@ -59,6 +59,8 @@ POST   /api/songs/{id}/like          -> 200 {liked: bool}   (toggle) | 404 song
 GET    /api/me/likes?limit=&offset=  -> 200 [Song + liked_at], liked_at DESC, tie-break song_id DESC
 
 PLAYLISTS
+GET    /api/playlists?limit=&offset=   -> 200 [{id, name, published, picture_url}], public catalog of
+        published playlists only, id DESC; limit default 10 / max 100, offset default 0; 422 invalid
 POST   /api/playlists (authed) multipart: name, picture?, songs=[JSON array of ids, may be []] -> 201 Playlist
         picture optional (jpg/png/webp <=5MB, 415/413) -> defaults to playlistPicture/default;
         songs order preserved via position 0..n-1; unknown id or duplicate id in array -> 422
@@ -85,6 +87,12 @@ GET    /media/song/{id} | /media/cover/{id} | /media/playlistPicture/{id}
         already stored, return 500
 
 SEED (deliverable, db admin authority)
+- run with: docker compose -f backend/docker-compose.yml exec php php /var/www/html/seed.php
 - creates the MINIO_BUCKET bucket if missing, applies the public-read bucket policy
 - creates cover/default and playlistPicture/default objects
-- demo users, songs with royalty-free audio/cover files, one published=true playlist exercising FR-6
+- reads backend/seed/seed.json: users, songs (title/author/uploader + music/cover file paths),
+  likes and playlists; uploads the files from backend/seed/music and backend/seed/covers
+- idempotent: entities are matched by name/login+owner and updated on re-run
+- demo data: 10 SoundHelix example songs by T. Schürger (free to use with credit,
+  see seed/seed.json attribution), five playlists all published=true so they appear
+  in the public catalog (FR-6); change `published` in seed.json to make one private

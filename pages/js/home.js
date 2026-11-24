@@ -11,29 +11,47 @@ document.addEventListener('DOMContentLoaded', async () => {
         console.error('Ошибка загрузки лайков:', err);
     }
 
-    // 2. Загружаем плейлисты пользователя (если авторизован)
+    // 2. Загружаем публичный каталог плейлистов и свои (если авторизован)
     const albumRow = document.querySelector('.album-row');
     if (albumRow) {
-        try {
-            const playlists = user ? await API.getMyPlaylists() : [];
+        const [publishedResult, mineResult] = await Promise.allSettled([
+            API.getPlaylists({ limit: 10 }),
+            user ? API.getMyPlaylists() : Promise.resolve([]),
+        ]);
 
-            if (playlists.length) {
-                albumRow.innerHTML = playlists.map(pl => `
-                    <article class="album-card" data-id="${pl.id}">
-                        <img src="${pl.cover}" alt="" class="album-card__cover">
-                        <h3 class="album-card__title">${pl.name}</h3>
-                    </article>
-                `).join('');
+        if (publishedResult.status === 'rejected') {
+            console.error('Ошибка загрузки каталога плейлистов:', publishedResult.reason);
+        }
+        if (mineResult.status === 'rejected') {
+            console.error('Ошибка загрузки моих плейлистов:', mineResult.reason);
+        }
 
-                albumRow.addEventListener('click', e => {
-                    const card = e.target.closest('.album-card');
-                    if (card) openPlaylist(card.dataset.id);
-                });
-            } else {
-                albumRow.innerHTML = '<p style="color: var(--color-text-muted, #a1a1a6)">Плейлистов пока нет.</p>';
-            }
-        } catch (err) {
-            console.error('Ошибка загрузки плейлистов:', err);
+        const published = publishedResult.status === 'fulfilled' ? publishedResult.value : [];
+        const mine = mineResult.status === 'fulfilled' ? mineResult.value : [];
+
+        // Свои плейлисты показываем первыми, опубликованные дубли не добавляем.
+        const seen = new Set();
+        const playlists = [...mine, ...published].filter(pl => {
+            const key = String(pl.id);
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+
+        if (playlists.length) {
+            albumRow.innerHTML = playlists.map(pl => `
+                <article class="album-card" data-id="${pl.id}">
+                    <img src="${pl.cover}" alt="" class="album-card__cover">
+                    <h3 class="album-card__title">${pl.name}</h3>
+                </article>
+            `).join('');
+
+            albumRow.addEventListener('click', e => {
+                const card = e.target.closest('.album-card');
+                if (card) openPlaylist(card.dataset.id);
+            });
+        } else {
+            albumRow.innerHTML = '<p style="color: var(--color-text-muted, #a1a1a6)">Плейлистов пока нет.</p>';
         }
     }
 

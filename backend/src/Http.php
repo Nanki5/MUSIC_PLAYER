@@ -36,9 +36,9 @@ class Http
         return rtrim(Config::get('PUBLIC_BASE_URL'), '/') . '/media/' . ltrim($key, '/');
     }
 
-    public static function assertValidPagination(): array
+    public static function assertValidPagination(int $defaultLimit = 20): array
     {
-        $limit = $_GET['limit'] ?? '20';
+        $limit = $_GET['limit'] ?? (string)$defaultLimit;
         $offset = $_GET['offset'] ?? '0';
 
         $limitOk = is_string($limit) && preg_match('/^\d+$/', $limit) === 1;
